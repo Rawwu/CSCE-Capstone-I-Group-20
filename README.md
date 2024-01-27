@@ -2,8 +2,8 @@
 
 Group 20:
 
-Ahmad Dzhaguri
-David Rubio
-Elijah Haynes
-Luis Molina
-Raul Martinez
+- Ahmad Dzhaguri
+- David Rubio
+- Elijah Haynes
+- Luis Molina
+- Raul Martinez
