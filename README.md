@@ -1,2 +1,9 @@
 # CSCE-Capstone-I-Group-20
-GitHub Repository for Group 20's Capstone Assignment
+
+Group 20:
+
+Ahmad Dzhaguri
+David Rubio
+Elijah Haynes
+Luis Molina
+Raul Martinez
