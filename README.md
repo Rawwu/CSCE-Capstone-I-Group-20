@@ -8,3 +8,12 @@ Group 9:
 - Luis Molina
 - Syed Uddin
 - Raul Martinez
+
+Development environment
+
+Frontend server
+
+Frontend React app
+
+Backend server
+![alt text](https://github.com/rawwu/markdown-here/raw/master/images/backend-server.png "Backend server")
