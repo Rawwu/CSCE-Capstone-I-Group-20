@@ -1,13 +1,15 @@
 import React from 'react'
 
+const Flights = ({ flight }) => {
+  const { airline, src_airport, dst_airport } = flight;
 
-const Flights = props => (
-  <div>
-    <h3>{props.flight.name}</h3>
-    <p>{props.flight.description}</p>
-    <p>{props.flight.date.substring(0,10)}</p>
-  </div>
-);
-
+  return (
+    <tr>
+      <td>{airline.name}</td>
+      <td>{src_airport}</td>
+      <td>{dst_airport}</td>
+    </tr>
+  );
+};
 
 export default Flights;

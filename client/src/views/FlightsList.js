@@ -1,22 +1,22 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import Example from '../components/Example';
+import Flights from '../components/Flights';
 
 
-export default class ExamplesList extends Component {
+export default class FlightsList extends Component {
   constructor(props) {
     super(props);
 
 
-    this.state = { examples: [] };
+    this.state = { flights: [] };
   }
 
 
   componentDidMount() {
-    axios.get('http://localhost:5000/examples/')
+    axios.get('http://localhost:3001/flights/')
       .then(response => {
-        this.setState({ examples: response.data });
+        this.setState({ flights: response.data });
       })
       .catch((error) => {
         console.log(error);
@@ -24,9 +24,9 @@ export default class ExamplesList extends Component {
   }
 
 
-  exampleList() {
-    return this.state.examples.map(currentExample => {
-      return <Example example={currentExample} key={currentExample._id} />;
+  flightList() {
+    return this.state.flights.map(currentFlight => {
+      return <Flights flight={currentFlight} key={currentFlight._id} />;
     })
   }
 
@@ -34,17 +34,21 @@ export default class ExamplesList extends Component {
   render() {
     return (
       <div>
-        <h3>Examples List</h3>
+        <h3>Flight List</h3>
+        <div className="search-box">
+          <input type="text" placeholder="Search for flight" />
+          <button>Search</button>
+        </div>
         <table className="table">
           <thead className="thead-light">
             <tr>
               <th>Name</th>
-              <th>Description</th>
-              <th>Date</th>
+              <th>Source Airport</th>
+              <th>Destination Airport</th>
             </tr>
           </thead>
           <tbody>
-            { this.exampleList() }
+            { this.flightList() }
           </tbody>
         </table>
       </div>

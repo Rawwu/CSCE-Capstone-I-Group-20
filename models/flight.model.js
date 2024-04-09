@@ -3,7 +3,6 @@ const mongoose = require('mongoose')
 
 const Schema = mongoose.Schema;
 
-
 const flightSchema = new Schema({
     _id: { type: Schema.Types.ObjectId, required: true },
     airline: {
@@ -21,12 +20,14 @@ const flightSchema = new Schema({
     timestamps: true,
   });
 
-const Flights = mongoose.model('Flights', flightSchema);
+const Flights = mongoose.model('Flights', flightSchema, 'routes');
+
 
 
 module.exports = Flights;
 
 /*
+// MongoDB file schema
 {"_id":{"$oid":"56e9b39b732b6122f877fa31"},
 "airline":{
     "id":{"$numberInt":"410"},

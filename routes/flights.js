@@ -3,8 +3,9 @@ let Flights = require('../models/flight.model');
 
 
 router.route('/').get((req, res) => {
-    Flights.find()
-    .then(examples => res.json(examples))
+    const limit = parseInt(req.query.limit) || 10;
+    Flights.find().limit(limit)
+    .then(flights => res.json(flights))
     .catch(err => res.status(400).json('Error: ' + err));
 });
 
