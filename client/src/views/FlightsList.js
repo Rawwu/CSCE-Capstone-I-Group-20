@@ -14,7 +14,7 @@ export default class FlightsList extends Component {
 
 
   componentDidMount() {
-    axios.get('http://localhost:3001/flights/')
+    axios.get('http://localhost:3000/flights/')
       .then(response => {
         this.setState({ flights: response.data });
       })
