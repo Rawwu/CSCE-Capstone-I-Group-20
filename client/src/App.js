@@ -10,11 +10,13 @@ import Checkout from "./views/Checkout";
 
 function App() {
   return (
-    <Router>
+    <Router> {/* Router component for routing */}
       <div className="container">
+        {/* Bootstrap navbar */}
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
           <Link to="/" className="navbar-brand">SIFT</Link>
           <div className="collpase navbar-collapse">
+            {/* Navbar links */}
             <ul className="navbar-nav mr-auto">
               <li className="navbar-item">
                 <Link to="/" className="nav-link">Flights</Link>
@@ -35,7 +37,7 @@ function App() {
           </div>
         </nav>
         <br/>
-        <Routes>
+        <Routes> {/* Define routes */}
           <Route path="/" element={<FlightsList />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
@@ -47,5 +49,5 @@ function App() {
   );
 }
 
-
+// Export App component as default
 export default App;

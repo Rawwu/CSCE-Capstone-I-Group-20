@@ -1,6 +1,6 @@
 const router = require('express').Router();
 
-// Define your login route
+// Define the login route
 router.post('/login', (req, res) => {
   // Add login functionality here (e.g., verify credentials)
   const { username, password } = req.body;
@@ -13,5 +13,5 @@ router.post('/login', (req, res) => {
     res.status(401).json({ message: 'Invalid username or password' });
   }
 });
-
+// Export the router module
 module.exports = router;
