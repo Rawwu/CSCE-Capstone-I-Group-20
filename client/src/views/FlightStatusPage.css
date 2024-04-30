@@ -1,0 +1,20 @@
+.input-group {
+  margin-bottom: 20px;
+}
+
+.error-message {
+  border: 0;
+  border-top: 1px solid #ccc;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.flight-info-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.flight-info-table td {
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+}
