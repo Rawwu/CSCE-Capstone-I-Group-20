@@ -1,13 +1,64 @@
 import React, { useState } from 'react';
 
+// Add registration functionality here
 const Register = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState(null);
+ 
+    const handleRegister = async (e) => {
+        e.preventDefault();
 
-  const handleRegister = (e) => {
-    e.preventDefault();
-    // Add registration functionality here (call an API endpoint)
-  };
+        //Validating input
+        try
+        {
+            if(!username || !password)
+            {
+                setError('Username and password are requried for registration');
+                return;
+            }
+
+        let request;
+        try
+        {
+        //sending the request to the server side 
+            const request = await fetch('/register', {
+            method: 'POST',
+            headers: 
+            {
+                 'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({username,password})
+        });
+        }
+
+        catch (error)
+        {
+            console.error('Error sending request', error);
+            setError('Unexpected error occured');
+            return;
+        }
+
+         //checking if the request was successful
+        if(request.ok)
+        {
+            console.log('Registration successful');
+        }
+
+        //sending errors if request comes back unsuccessful
+        else
+        {
+            const data = await request.json();
+            setError(data.message || 'Registration unsuccessful')
+        }
+
+        }
+         catch (error)
+        {
+            console.error('Registering error', error);
+            setError('Unexpected error occurred');
+        }
+    }
 
   return (
     <div>

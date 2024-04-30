@@ -6,6 +6,7 @@ require('dotenv').config();
 // Import routers for different routes
 const flightsRouter = require('./routes/flights');
 const loginRouter = require('./routes/login');
+const registerRouter = require('./routes/register')
 
 // Create an instance of the Express application
 const app = express();
@@ -25,6 +26,7 @@ connection.once('open', () => {
 // Define routes
 app.use('/flights', flightsRouter);
 app.use('/login', loginRouter);
+app.use('/register', registerRouter);
 
 // Start the Express server
 const port = process.env.PORT || 3000;
