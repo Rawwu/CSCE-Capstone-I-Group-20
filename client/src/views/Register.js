@@ -22,7 +22,7 @@ const Register = () => {
         try
         {
         //sending the request to the server side 
-            const request = await fetch('/register', {
+            const request = await fetch('.../server/routes/register', {
             method: 'POST',
             headers: 
             {
