@@ -7,6 +7,13 @@ import Login from "./views/Login";
 import Register from "./views/Register";
 import UserProfile from "./views/UserProfile";
 import Checkout from "./views/Checkout";
+import FlightDetails from "./views/FlightDetails";
+
+function scrollToFlightDetails() {
+  // Scroll to the beginning of the Flight Details section
+  const flightDetailsSection = document.getElementById('flight-details-section');
+  flightDetailsSection.scrollIntoView({ behavior: 'smooth' });
+}
 
 function App() {
   return (
@@ -33,6 +40,11 @@ function App() {
               <li className="navbar-item">
                 <Link to="/checkout" className="nav-link">Checkout</Link>
               </li>
+              <li className="navbar-item">
+                <Link to="/flight-details" className="nav-link" onClick={scrollToFlightDetails}>
+                  Flight Details
+                </Link>
+              </li>
             </ul>
           </div>
         </nav>
@@ -43,6 +55,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/profile" element={<UserProfile />} />
           <Route path="/checkout" element={<Checkout />} />
+          <Route path="/flight-details" element={<FlightDetails />} />
         </Routes>
       </div>
     </Router>
