@@ -19,7 +19,7 @@ class FlightsList extends Component {
   }
 
   fetchFlights() {
-    axios.get('http://localhost:3000/flights/')
+    axios.get('https://jqec36p0ji.execute-api.us-east-2.amazonaws.com/dev/flights/search')
       .then(response => {
         const formattedFlights = response.data.map(flight => {
           // Format departureDate and returnDate before updating state
@@ -35,7 +35,7 @@ class FlightsList extends Component {
   }
 
   handleSearch = (searchParams, sortBy) => { // Receive sortBy parameter
-    axios.post('http://localhost:3000/flights/search', searchParams)
+    axios.post('https://jqec36p0ji.execute-api.us-east-2.amazonaws.com/dev/flights/search', searchParams)
       .then(response => {
         let sortedFlights = response.data.sort((a, b) => a.price - b.price); // Sort by price in ascending order
         sortedFlights = sortedFlights.slice(0, 3); // Get top 3 flights with lowest prices
