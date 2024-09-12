@@ -19,7 +19,7 @@ class FlightsList extends Component {
   }
 
   fetchFlights() {
-    axios.get('https://jqec36p0ji.execute-api.us-east-2.amazonaws.com/dev/flights/search')
+    axios.get('https://jqec36p0ji.execute-api.us-east-2.amazonaws.com/dev/flights')
       .then(response => {
         const formattedFlights = response.data.map(flight => {
           // Format departureDate and returnDate before updating state
