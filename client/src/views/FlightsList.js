@@ -22,10 +22,7 @@ class FlightsList extends Component {
     axios.get('https://jqec36p0ji.execute-api.us-east-2.amazonaws.com/dev/flights')
       .then(response => {
         const formattedFlights = response.data.map(flight => {
-          // Format departureDate and returnDate before updating state
-          const formattedDepartureDate = this.formatDate(flight.departureDate);
-          const formattedReturnDate = this.formatDate(flight.returnDate);
-          return { ...flight, departureDate: formattedDepartureDate, returnDate: formattedReturnDate };
+          return flight;
         });
         this.setState({ flights: formattedFlights });
       })
@@ -56,20 +53,14 @@ class FlightsList extends Component {
       });
   };
 
-  formatDate(dateString) {
-    const date = new Date(dateString);
-    const options = { month: '2-digit', day: '2-digit', year: 'numeric' };
-    return date.toLocaleDateString('en-US', options);
+  formatDate(unixTimestamp) {
+    // Use moment to convert UNIX timestamp
+    return moment.unix(unixTimestamp).format('MM/DD/YYYY');
   }
 
   flightList() {
     return this.state.flights.map(currentFlight => {
-        // Format departureDate and returnDate before passing them to Flights component
-        const formattedDepartureDate = moment(currentFlight.departureDate).tz('America/Chicago').format('MM/DD [at] hh:mm A');
-        const formattedReturnDate = moment(currentFlight.returnDate).tz('America/Chicago').format('MM/DD [at] hh:mm A');
-        console.log('Formatted Departure Date:', formattedDepartureDate);
-        console.log('Formatted Return Date:', formattedReturnDate);
-        return <Flights flight={{ ...currentFlight, departureDate: formattedDepartureDate, returnDate: formattedReturnDate }} key={currentFlight._id} />;
+      return <Flights flight={currentFlight} key={currentFlight._id} />;
     });
   }
 
