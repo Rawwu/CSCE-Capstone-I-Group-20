@@ -1,92 +1,105 @@
 import React, { useState } from 'react';
+import { Auth } from 'aws-amplify';
 
-// Add registration functionality here
 const Register = () => {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState(null);
- 
-    const handleRegister = async (e) => {
-        e.preventDefault();
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [error, setError] = useState(null);
+  const [confirmationCode, setConfirmationCode] = useState('');
+  const [step, setStep] = useState(1);
 
-        //Validating input
-        try
-        {
-            if(!username || !password)
-            {
-                setError('Username and password are requried for registration');
-                return;
-            }
+  const handleRegister = async (e) => {
+    e.preventDefault();
 
-            let request;
-            try
-            {
-            //sending the request to the server side 
-                request = await fetch('Sift/server/routes/register', {
-                method: 'POST',
-                headers: 
-                {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({username,password})
-                });
-                //loging request
-                console.log('Request', request);
-            }
-
-            //Sending error if sent request has error
-            catch (error)
-            {
-                console.error('Error sending request', error);
-                setError('Unexpected error occured');
-                return;
-            }
-
-             //checking if the request was successful
-            if(request && request.ok)
-            {
-                console.log('Registration successful');
-            }
-
-            //sending errors if request comes back unsuccessful
-            else
-            {
-                const data = await request.json();
-                setError(data.message || 'Registration unsuccessful')
-            }
-
-        }
-        catch (error)
-        {
-            console.error('Registering error', error);
-            setError('Unexpected error occurred');
-        }
+    try {
+      const signUpResponse = await Auth.signUp({
+        username, 
+        password,
+        attributes: {
+          email,
+          phone_number: phoneNumber,  // Optional
+        },
+      });
+      console.log(signUpResponse);
+      setStep(2); // Move to confirmation step
+    } catch (error) {
+      setError(error.message);
+      console.error('Error registering:', error);
     }
+  };
+
+  const handleConfirmSignUp = async () => {
+    try {
+      await Auth.confirmSignUp(username, confirmationCode);
+      alert('User confirmed!');
+    } catch (error) {
+      setError(error.message);
+      console.error('Error confirming sign-up:', error);
+    }
+  };
 
   return (
     <div>
-      <h2>Register</h2>
-      <form onSubmit={handleRegister}>
+      {step === 1 && (
         <div>
-          <label htmlFor="username">Username:</label>
+          <h2>Register</h2>
+          <form onSubmit={handleRegister}>
+            <div>
+              <label htmlFor="username">Username:</label>
+              <input
+                type="text"
+                id="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
+            </div>
+            <div>
+              <label htmlFor="password">Password:</label>
+              <input
+                type="password"
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+            <div>
+              <label htmlFor="email">Email:</label>
+              <input
+                type="email"
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
+            <div>
+              <label htmlFor="phoneNumber">Phone Number (optional):</label>
+              <input
+                type="tel"
+                id="phoneNumber"
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
+              />
+            </div>
+            <button type="submit">Register</button>
+          </form>
+          {error && <p>{error}</p>}
+        </div>
+      )}
+
+      {step === 2 && (
+        <div>
+          <h2>Confirm Registration</h2>
           <input
             type="text"
-            id="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            value={confirmationCode}
+            onChange={(e) => setConfirmationCode(e.target.value)}
+            placeholder="Enter confirmation code"
           />
+          <button onClick={handleConfirmSignUp}>Confirm</button>
         </div>
-        <div>
-          <label htmlFor="password">Password:</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-        <button type="submit">Register</button>
-      </form>
+      )}
     </div>
   );
 };
