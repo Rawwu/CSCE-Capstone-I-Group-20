@@ -1,12 +1,21 @@
 import React, { useState } from 'react';
+import { Auth } from 'aws-amplify';
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState(null);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    // Add login functionality here (call an API endpoint)
+    try {
+      const user = await Auth.signIn(username, password);
+      console.log('User logged in:', user);
+      // Redirect or perform other actions after successful login
+    } catch (error) {
+      setError(error.message);
+      console.error('Login error:', error);
+    }
   };
 
   return (
@@ -33,6 +42,7 @@ const Login = () => {
         </div>
         <button type="submit">Login</button>
       </form>
+      {error && <p>{error}</p>}
     </div>
   );
 };
