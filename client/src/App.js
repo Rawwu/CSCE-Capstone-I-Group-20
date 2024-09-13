@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -8,12 +8,13 @@ import Register from "./views/Register";
 import UserProfile from "./views/UserProfile";
 import Checkout from "./views/Checkout";
 import FlightDetails from "./views/FlightDetails";
-import Amplify, { Auth } from 'aws-amplify';
-import awsExports from './aws-exports'; 
+import { Amplify, Auth } from 'aws-amplify'; 
+import awsExports from './aws-exports';
+
 Amplify.configure(awsExports);
 
 function scrollToFlightDetails() {
-  // Scroll to the beginning of the Flight Details section
+  // Scrolls to the beginning of the Flight Details section
   const flightDetailsSection = document.getElementById('flight-details-section');
   flightDetailsSection.scrollIntoView({ behavior: 'smooth' });
 }
@@ -25,7 +26,7 @@ function App() {
         {/* Bootstrap navbar */}
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
           <Link to="/" className="navbar-brand">SIFT</Link>
-          <div className="collpase navbar-collapse">
+          <div className="collapse navbar-collapse">
             {/* Navbar links */}
             <ul className="navbar-nav mr-auto">
               <li className="navbar-item">
@@ -51,7 +52,7 @@ function App() {
             </ul>
           </div>
         </nav>
-        <br/>
+        <br />
         <Routes> {/* Define routes */}
           <Route path="/" element={<FlightsList />} />
           <Route path="/login" element={<Login />} />
@@ -65,5 +66,4 @@ function App() {
   );
 }
 
-// Export App component as default
 export default App;
