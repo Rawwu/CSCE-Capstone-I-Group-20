@@ -8,10 +8,10 @@ import Register from "./views/Register";
 import UserProfile from "./views/UserProfile";
 import Checkout from "./views/Checkout";
 import FlightDetails from "./views/FlightDetails";
-import { configure } from 'aws-amplify';
+import { Amplify } from 'aws-amplify';
 import awsExports from './aws-exports';
 
-configure(awsExports);
+Amplify.configure(awsExports);
 
 function scrollToFlightDetails() {
   // Scrolls to the beginning of the Flight Details section
