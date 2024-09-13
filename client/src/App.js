@@ -20,6 +20,10 @@ function scrollToFlightDetails() {
 }
 
 function App() {
+  useEffect(() => {
+    console.log("App component is rendering");
+  }, []);
+
   return (
     <Router> {/* Router component for routing */}
       <div className="container">
