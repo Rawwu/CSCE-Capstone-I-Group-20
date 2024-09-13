@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { signUp } from 'aws-amplify/auth';
+import { signUp, confirmSignUp } from 'aws-amplify/auth'; // Import both signUp and confirmSignUp
 
 const Register = () => {
   const [username, setUsername] = useState('');
@@ -33,7 +33,7 @@ const Register = () => {
 
   const handleConfirmSignUp = async () => {
     try {
-      await confirmSignUp(username, confirmationCode);
+      await confirmSignUp(username, confirmationCode);  // Use confirmSignUp
       alert('User confirmed!');
     } catch (error) {
       setError(error.message);
