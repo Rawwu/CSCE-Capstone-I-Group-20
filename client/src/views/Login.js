@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Auth } from 'aws-amplify';
+import { signIn } from 'aws-amplify/auth';
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -9,7 +9,7 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const user = await Auth.signIn(username, password);
+      const user = await signIn(username, password);
       console.log('User logged in:', user);
       // Redirect or perform other actions after successful login
     } catch (error) {

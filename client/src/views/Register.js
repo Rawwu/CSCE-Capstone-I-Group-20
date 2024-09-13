@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Auth } from 'aws-amplify';
+import { signUp } from 'aws-amplify/auth';
 
 const Register = () => {
   const [username, setUsername] = useState('');
@@ -12,18 +12,19 @@ const Register = () => {
 
   const handleRegister = async (e) => {
     e.preventDefault();
-
     try {
-      const signUpResponse = await Auth.signUp({
+      const { isSignUpComplete, userId, nextStep } = await signUp({
         username, 
         password,
-        attributes: {
-          email,
-          phone_number: phoneNumber,  // Optional
-        },
+        options: {
+          userAttributes: {
+            email,
+            phone_number: phoneNumber  // Optional
+          }
+        }
       });
-      console.log(signUpResponse);
-      setStep(2); // Move to confirmation step
+      console.log('Sign up complete:', isSignUpComplete);
+      setStep(2);  // Move to confirmation step
     } catch (error) {
       setError(error.message);
       console.error('Error registering:', error);
@@ -32,7 +33,7 @@ const Register = () => {
 
   const handleConfirmSignUp = async () => {
     try {
-      await Auth.confirmSignUp(username, confirmationCode);
+      await confirmSignUp(username, confirmationCode);
       alert('User confirmed!');
     } catch (error) {
       setError(error.message);
