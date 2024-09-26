@@ -1,45 +1,74 @@
 import React, { useState } from 'react';
 import { signUp, confirmSignUp } from 'aws-amplify/auth'; // Import both signUp and confirmSignUp
+import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
-  const [username, setUsername] = useState('');
+  const [username, setUsername] = useState('');  // This is for custom preferred username
   const [password, setPassword] = useState('');
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState('');  // Email is used as Cognito username
   const [phoneNumber, setPhoneNumber] = useState('');
   const [error, setError] = useState(null);
   const [confirmationCode, setConfirmationCode] = useState('');
   const [step, setStep] = useState(1);
+  const navigate = useNavigate(); // Initialize the navigation hook
 
   const handleRegister = async (e) => {
     e.preventDefault();
+  
+    // Form validation
+    if (!email || !password) {
+      setError('Please fill in all required fields');
+      return;
+    }
+  
     try {
-      const { isSignUpComplete, userId, nextStep } = await signUp({
-        username, 
+      // Use email as the Cognito "username" for signing in
+      const { user } = await signUp({
+        username: email,  // Using email as the Cognito username
         password,
-        options: {
-          userAttributes: {
-            email,
-            phone_number: phoneNumber  // Optional
-          }
-        }
+        attributes: {
+          email,  // Cognito required attribute
+          phone_number: phoneNumber,  // Optional attribute
+          'custom:display_username': username  // Custom attribute for username
+        },
       });
-      console.log('Sign up complete:', isSignUpComplete);
-      setStep(2);  // Move to confirmation step
+  
+      console.log('Sign up complete:', user);
+      setStep(2);  // Move to the confirmation step
+      setError(null);  // Reset the error
     } catch (error) {
       setError(error.message);
       console.error('Error registering:', error);
     }
   };
+  
+  
 
   const handleConfirmSignUp = async () => {
+    // Basic validation for confirmation code
+    if (!confirmationCode) {
+      setError('Please enter the confirmation code');
+      return;
+    }
+  
     try {
-      await confirmSignUp(username, confirmationCode);  // Use confirmSignUp
+      // Use email (which is the Cognito username) to confirm sign-up
+      const { isSignUpComplete, nextStep } = await confirmSignUp({
+        username: email,  // Using email as the Cognito username
+        confirmationCode
+      });
+  
       alert('User confirmed!');
+      setError(null);  // Reset the error
+  
+      // Redirect to login page
+      navigate('/login');
     } catch (error) {
       setError(error.message);
       console.error('Error confirming sign-up:', error);
     }
   };
+  
 
   return (
     <div>
@@ -91,14 +120,33 @@ const Register = () => {
 
       {step === 2 && (
         <div>
-          <h2>Confirm Registration</h2>
-          <input
-            type="text"
-            value={confirmationCode}
-            onChange={(e) => setConfirmationCode(e.target.value)}
-            placeholder="Enter confirmation code"
-          />
-          <button onClick={handleConfirmSignUp}>Confirm</button>
+            <h2>Confirm Registration</h2>
+            <div>
+            <label htmlFor="emailConfirmation">Email:</label>
+            <input
+                type="text"
+                id="emailConfirmation"
+                value={email}  // Pre-populate with email
+                disabled
+            />
+            </div>
+            <div>
+            <label htmlFor="confirmationCode">Confirmation Code:</label>
+            <input
+                type="text"
+                id="confirmationCode"
+                value={confirmationCode}
+                onChange={(e) => setConfirmationCode(e.target.value)}
+                placeholder="Enter confirmation code"
+            />
+            </div>
+            <button 
+                onClick={handleConfirmSignUp} 
+                disabled={!confirmationCode}  // Disable button if no confirmation code is entered
+            >
+                Confirm
+            </button>
+            {error && <p>{error}</p>}
         </div>
       )}
     </div>

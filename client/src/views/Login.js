@@ -1,50 +1,52 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { signIn } from 'aws-amplify/auth';
 
-const Login = () => {
-  const [username, setUsername] = useState('');
+function Login({ setIsAuthenticated }) {
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState(null);
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     try {
-      const user = await signIn(username, password);
-      console.log('User logged in:', user);
-      // Redirect or perform other actions after successful login
-    } catch (error) {
-      setError(error.message);
-      console.error('Login error:', error);
+        await signIn({ username: email, password });
+
+      setIsAuthenticated(true); // Update authentication state
+      navigate('/'); // Redirect to home page
+    } catch (err) {
+      setError('Failed to login: ' + err.message);
     }
   };
 
   return (
     <div>
       <h2>Login</h2>
-      <form onSubmit={handleLogin}>
-        <div>
-          <label htmlFor="username">Username:</label>
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+      <form onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label>Email:</label>
           <input
-            type="text"
-            id="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            type="email"
+            className="form-control"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
         </div>
-        <div>
-          <label htmlFor="password">Password:</label>
+        <div className="form-group">
+          <label>Password:</label>
           <input
             type="password"
-            id="password"
+            className="form-control"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        <button type="submit">Login</button>
+        <button type="submit" className="btn btn-primary">Login</button>
       </form>
-      {error && <p>{error}</p>}
     </div>
   );
-};
+}
 
 export default Login;
