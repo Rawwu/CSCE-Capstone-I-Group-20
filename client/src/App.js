@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
 import "bootstrap/dist/css/bootstrap.min.css";
-import FlightsList from "./views/FlightsList";
+import SearchFlights from './views/SearchFlights';
 import Login from "./views/Login";
 import Register from "./views/Register";
 import UserProfile from "./views/UserProfile";
@@ -33,11 +33,12 @@ function App() {
     checkUser();
   }, []);
 
+  // Function to sign out user
   const handleSignOut = async () => {
     try {
       await signOut();
       setIsAuthenticated(false);
-      navigate('/login'); // Navigate to login after sign out
+      navigate('/login'); // Navigate to login or home page after sign out
     } catch (error) {
       console.error('Error signing out:', error);
     }
@@ -84,7 +85,7 @@ function App() {
             </nav>
             <br />
             <Routes> {/* Define routes */}
-                <Route path="/" element={<FlightsList />} />
+                <Route path="/" element={<SearchFlights  />} />
                 <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/profile" element={<UserProfile />} />
