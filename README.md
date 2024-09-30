@@ -13,6 +13,7 @@
 
 ### Frontend React app
 ![Flight Search page](https://github.com/Rawwu/Sift/blob/main/images/search-page.png "Frontend React server")
+![Flight Details](https://github.com/Rawwu/Sift/blob/main/images/flight-details.png "Flight Details page")
 ![Login page](https://github.com/Rawwu/Sift/blob/main/images/login.png "Frontend React server")
 ![Register page](https://github.com/Rawwu/Sift/blob/main/images/register.png "Frontend React server")
 ### Backend server
