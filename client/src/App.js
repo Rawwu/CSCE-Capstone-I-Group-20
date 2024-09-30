@@ -7,6 +7,7 @@ import Register from "./views/Register";
 import UserProfile from "./views/UserProfile";
 import Checkout from "./views/Checkout";
 import FlightDetails from "./views/FlightDetails";
+import Booking from "./views/Booking";
 import { signOut, getCurrentUser } from 'aws-amplify/auth';
 
 function scrollToFlightDetails() {
@@ -84,13 +85,14 @@ function App() {
                 </div>
             </nav>
             <br />
-            <Routes> {/* Define routes */}
+            <Routes>
                 <Route path="/" element={<SearchFlights  />} />
                 <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/profile" element={<UserProfile />} />
                 <Route path="/checkout" element={<Checkout />} />
                 <Route path="/flight-details" element={<FlightDetails />} />
+                <Route path="/booking" element={<Booking />} />
             </Routes>
         </div>
     );

@@ -1,5 +1,6 @@
 import React from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { useNavigate, useLocation } from 'react-router-dom';
 import '../styles/flightDetails.css';  // Custom CSS for flight details
 
 const FlightDetails = () => {
@@ -8,6 +9,18 @@ const FlightDetails = () => {
     const { flight, previousFlights } = location.state || {};
 
     const { itineraries, price, validatingAirlineCodes } = flight;
+
+    const confirmPrice = async () => {
+        try {
+            const response = await axios.post('https://y2zghqn948.execute-api.us-east-2.amazonaws.com/Dev/price-flight', { flightOffer: flight });
+            const confirmedPrice = response.data; // Get updated price and availability from API
+            console.log('Confirmed price:', confirmedPrice);
+            navigate('/booking', { state: { flight: confirmedPrice.flightOffers[0] } });
+        } catch (error) {
+            console.error('Error confirming flight price:', error);
+        }
+    };
+    
 
     // Helper to format time
     const formatDateTime = (dateTime) => {
@@ -79,9 +92,14 @@ const FlightDetails = () => {
                 <p>- 1st checked bag available for a fee</p>
             </div>
 
-            {/* Back button */}
+            {/* FIXME - Back button
             <div className="back-button text-center mt-4">
                 <button className="btn btn-secondary" onClick={goBack}>Back to search results</button>
+            </div>
+            */}
+            {/* Confirm button */}
+            <div className="confirm-button text-center mt-4">
+                <button onClick={confirmPrice}>Confirm Price and Proceed to Booking</button>
             </div>
         </div>
     );
