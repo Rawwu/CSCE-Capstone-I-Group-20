@@ -9,6 +9,8 @@ import Checkout from "./views/Checkout";
 import FlightDetails from "./views/FlightDetails";
 import Booking from "./views/Booking";
 import BookingConfirmation from "./views/BookingConfirmation";
+import FindBooking from './views/FindBooking';
+import BookingDetails from './views/BookingDetails';
 import { signOut, getCurrentUser } from 'aws-amplify/auth';
 
 function scrollToFlightDetails() {
@@ -18,7 +20,7 @@ function scrollToFlightDetails() {
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // Correct placement of useNavigate
 
   useEffect(() => {
     const checkUser = async () => {
@@ -77,6 +79,9 @@ function App() {
                     <li className="navbar-item">
                     <Link to="/checkout" className="nav-link">Checkout</Link>
                     </li>
+                    <li className="navbar-item">
+                        <Link to="/find-booking" className="nav-link">Find Booking</Link> {/* Add this link */}
+                    </li>
                 </ul>
                 </div>
             </nav>
@@ -90,6 +95,8 @@ function App() {
                 <Route path="/flight-details" element={<FlightDetails />} />
                 <Route path="/booking" element={<Booking />} />
                 <Route path="/confirmation" element={<BookingConfirmation />} />
+                <Route path="/find-booking" element={<FindBooking />} />
+                <Route path="/booking-details" element={<BookingDetails />} />
             </Routes>
         </div>
     );
