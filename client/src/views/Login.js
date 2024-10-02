@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signIn } from 'aws-amplify/auth';
+import '../styles/login.css';
 
 function Login({ setIsAuthenticated }) {
   const [email, setEmail] = useState('');
