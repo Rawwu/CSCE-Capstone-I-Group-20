@@ -1,0 +1,10 @@
+body {
+    background-color: white;
+  }
+
+  .checkDiv {
+    background-color: rgb(194, 194, 194);
+    text-align: left;
+    border-radius: 20px;
+    padding: 45px;
+  }
