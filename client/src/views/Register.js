@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { signUp, confirmSignUp } from 'aws-amplify/auth'; // Import both signUp and confirmSignUp
 import { useNavigate } from 'react-router-dom';
+import '../styles/register.css';
 
 const Register = () => {
   const [username, setUsername] = useState('');  // This is for custom preferred username
