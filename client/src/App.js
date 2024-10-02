@@ -77,11 +77,6 @@ function App() {
                     <li className="navbar-item">
                     <Link to="/checkout" className="nav-link">Checkout</Link>
                     </li>
-                    <li className="navbar-item">
-                    <Link to="/flight-details" className="nav-link" onClick={scrollToFlightDetails}>
-                        Flight Details
-                    </Link>
-                    </li>
                 </ul>
                 </div>
             </nav>
