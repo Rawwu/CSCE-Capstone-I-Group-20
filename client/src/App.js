@@ -8,6 +8,7 @@ import UserProfile from "./views/UserProfile";
 import Checkout from "./views/Checkout";
 import FlightDetails from "./views/FlightDetails";
 import Booking from "./views/Booking";
+import BookingConfirmation from "./views/BookingConfirmation";
 import { signOut, getCurrentUser } from 'aws-amplify/auth';
 
 function scrollToFlightDetails() {
@@ -93,6 +94,7 @@ function App() {
                 <Route path="/checkout" element={<Checkout />} />
                 <Route path="/flight-details" element={<FlightDetails />} />
                 <Route path="/booking" element={<Booking />} />
+                <Route path="/confirmation" element={<BookingConfirmation />} />
             </Routes>
         </div>
     );

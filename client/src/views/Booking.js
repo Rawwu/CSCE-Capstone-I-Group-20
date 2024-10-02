@@ -22,67 +22,74 @@ const BookingPage = () => {
     return <div>Error: Flight details not available.</div>;
   }
 
-	const handleInputChange = (e) => {
-		const { name, value } = e.target;
-		setTravelerInfo({ ...travelerInfo, [name]: value });
-	};
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setTravelerInfo({ ...travelerInfo, [name]: value });
+  };
 
-	const handleBookingSubmit = async (e) => {
-		e.preventDefault();
-		try {
-			// Create traveler object following Amadeus API requirements
-			const travelers = [
-			{
-				id: "1",
-				dateOfBirth: travelerInfo.dateOfBirth,
-				name: {
-				firstName: travelerInfo.firstName,
-				lastName: travelerInfo.lastName
-				},
-				gender: travelerInfo.gender,
-				contact: {
-				emailAddress: travelerInfo.email,
-				phones: [
-					{
-					deviceType: "MOBILE",
-					countryCallingCode: "1", // Default to US country code, update as needed
-					number: travelerInfo.phoneNumber
-					}
-				]
-				}
-			}
-			];
+  const handleBookingSubmit = async (e) => {
+    e.preventDefault();
+    
+    // Use the email entered by the user as userId
+    const userId = travelerInfo.email;
 
-			// Log the data before sending it to the API
-			console.log("Flight offer data being sent:", flight);
-			console.log("Traveler data being sent:", travelers);
+    try {
+      const travelers = [
+        {
+          id: "1",
+          dateOfBirth: travelerInfo.dateOfBirth,
+          name: {
+            firstName: travelerInfo.firstName,
+            lastName: travelerInfo.lastName
+          },
+          gender: travelerInfo.gender,
+          contact: {
+            emailAddress: travelerInfo.email,
+            phones: [
+              {
+                deviceType: "MOBILE",
+                countryCallingCode: "1",
+                number: travelerInfo.phoneNumber
+              }
+            ]
+          },
+          documents: [
+            {
+              documentType: "PASSPORT",
+              birthPlace: "New York", // Hardcoded value
+              issuanceLocation: "New York", // Hardcoded value
+              issuanceDate: "2020-01-01", // Hardcoded value
+              number: "123456789", // Hardcoded value
+              expiryDate: "2030-01-01", // Hardcoded value
+              issuanceCountry: "US", // Hardcoded value
+              validityCountry: "US", // Hardcoded value
+              nationality: "US", // Hardcoded value
+              holder: true
+            }
+          ]
+        }
+      ];
 
-			const response = await axios.post('https://y2zghqn948.execute-api.us-east-2.amazonaws.com/Dev/create-order', {
-				data: {
-					type: "flight-order",
-					flightOffers: [flight],  // Ensure flight offer is in an array
-					travelers: travelers      // Include traveler data
-				}
-			});
+      const response = await axios.post('https://y2zghqn948.execute-api.us-east-2.amazonaws.com/Dev/create-order', {
+        userId,  // Use the email as userId
+        flightOffer: flight,
+        travelers: travelers
+      });
 
-			console.log("Payload being sent to Amadeus API:", {
-				data: {
-					type: "flight-order",
-					flightOffers: [flight],
-					travelers: travelers
-				}
-			});
-			  
+      console.log("Payload being sent to Amadeus API:", {
+        data: {
+          type: "flight-order",
+          flightOffers: [flight],
+          travelers: travelers
+        }
+      });
 
-			console.log('Booking response:', response.data);
-			navigate('/confirmation', { state: { booking: response.data } }); // Redirect to confirmation page
-			} catch (error) {
-			console.error('Error creating booking:', error);
-			}
-	};
-  
-
-
+      console.log('Booking response:', response.data);
+      navigate('/confirmation', { state: { booking: response.data } }); // Redirect to confirmation page
+    } catch (error) {
+      console.error('Error creating booking:', error);
+    }
+  };
 
   return (
     <div>
