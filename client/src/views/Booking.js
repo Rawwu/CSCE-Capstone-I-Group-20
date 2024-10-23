@@ -87,7 +87,7 @@ const BookingPage = () => {
       console.log('Booking response:', response.data);
       navigate('/confirmation', { state: { booking: response.data } }); // Redirect to confirmation page
     } catch (error) {
-      console.error('Error creating booking:', error);
+      console.error('Booking no longer available.', error);
     }
   };
 

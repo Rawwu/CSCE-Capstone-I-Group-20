@@ -1,103 +1,160 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, useLocation } from 'react-router-dom';
-import '../styles/flightDetails.css';  // Custom CSS for flight details
+import '../styles/flightDetails.css';
+import SeatMap from '../components/SeatMap.js';
 
 const FlightDetails = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const { flight, previousFlights } = location.state || {};
-
+    const { flight } = location.state || {};
     const { itineraries, price, validatingAirlineCodes } = flight;
+
+    const [selectedSeats, setSelectedSeats] = useState({});
+    const [confirmedPrice, setConfirmedPrice] = useState(null);
+    const [seatMapData, setSeatMapData] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [errorMessage, setErrorMessage] = useState('');
+    const [activeSegment, setActiveSegment] = useState(0);
+    const [hasFetchedSeatMap, setHasFetchedSeatMap] = useState(false);
+
+    useEffect(() => {
+        const fetchSeatMap = async () => {
+            if (hasFetchedSeatMap) return; // Prevent duplicate calls
+            try {
+                setIsLoading(true);
+                const response = await axios.post('https://y2zghqn948.execute-api.us-east-2.amazonaws.com/Dev/seatmap', {
+                    flightOffer: flight
+                });
+                setSeatMapData(response.data.length > 0 ? response.data : null);
+                setHasFetchedSeatMap(true);
+            } catch (error) {
+                console.error('Error fetching seat map:', error);
+                setSeatMapData(null);
+                setErrorMessage('Unable to retrieve seat map. Please try again later.');
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        if (flight && !hasFetchedSeatMap) {
+            fetchSeatMap();
+        }
+    }, [flight, hasFetchedSeatMap]);
+
 
     const confirmPrice = async () => {
         try {
-            const response = await axios.post('https://y2zghqn948.execute-api.us-east-2.amazonaws.com/Dev/price-flight', { flightOffer: flight });
-            const confirmedPrice = response.data; // Get updated price and availability from API
-            console.log('Confirmed price:', confirmedPrice);
+            if (!flight || !flight.itineraries) {
+                setErrorMessage('Invalid flight data. Please try again.');
+                return;
+            }
+    
+            const updatedFlightOffer = {
+                ...flight,
+                itineraries: (flight.itineraries || []).map((itinerary, itineraryIndex) => ({
+                    ...itinerary,
+                    segments: (itinerary.segments || []).map((segment, segIndex) => {
+                        let updatedFareDetails = (segment.travelerPricings || []).map(traveler => {
+                            if (!traveler.fareDetailsBySegment) return traveler;
+    
+                            return {
+                                ...traveler,
+                                fareDetailsBySegment: (traveler.fareDetailsBySegment || []).map(detail => {
+                                    let newDetails = { ...detail };
+                                    const seatForSegment = selectedSeats[`${itineraryIndex}-${segIndex}`];
+                                    if (seatForSegment) {
+                                        newDetails.additionalServices = {
+                                            ...newDetails.additionalServices,
+                                            chargeableSeatNumber: seatForSegment.number
+                                        };
+                                    }
+                                    return newDetails;
+                                })
+                            };
+                        });
+    
+                        return {
+                            ...segment,
+                            travelerPricings: updatedFareDetails
+                        };
+                    })
+                }))
+            };
+    
+            const response = await axios.post('https://y2zghqn948.execute-api.us-east-2.amazonaws.com/Dev/price-flight', {
+                flightOffer: updatedFlightOffer
+            });
+    
+            const confirmedPrice = response.data;
+            setConfirmedPrice(confirmedPrice);
             navigate('/booking', { state: { flight: confirmedPrice.flightOffers[0] } });
         } catch (error) {
             console.error('Error confirming flight price:', error);
+            setErrorMessage('Unable to confirm the price. Please try again.');
         }
     };
     
 
-    // Helper to format time
-    const formatDateTime = (dateTime) => {
-        const date = new Date(dateTime);
-        return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+    const handleSeatSelection = (seat, itineraryIndex, segIndex) => {
+        if (!seat) return;
+        setSelectedSeats(prevSeats => ({
+            ...prevSeats,
+            [`${itineraryIndex}-${segIndex}`]: seat
+        }));
     };
 
-    const calculateDuration = (departure, arrival) => {
-        const durationMs = new Date(arrival) - new Date(departure);
-        const hours = Math.floor(durationMs / (1000 * 60 * 60));
-        const minutes = Math.floor((durationMs % (1000 * 60 * 60)) / (1000 * 60));
-        return `${hours} hr ${minutes} min`;
-    };
-
-    // Use previousFlights for displaying search results or handle navigation back
-    const goBack = () => {
-        if (previousFlights) {
-            navigate('/search-flights', { state: { flights: previousFlights } });
-        } else {
-            navigate(-1);
+    const handleNextSegment = () => {
+        if (activeSegment < seatMapData.length - 1) {
+            setActiveSegment(activeSegment + 1);
         }
     };
 
-    // Get city information from the flight itineraries
-    const origin = itineraries[0].segments[0].departure.iataCode; // First segment's departure code
-    const destination = itineraries[0].segments[itineraries[0].segments.length - 1].arrival.iataCode; // Last segment's arrival code
+    const handlePreviousSegment = () => {
+        if (activeSegment > 0) {
+            setActiveSegment(activeSegment - 1);
+        }
+    };
 
     return (
         <div className="details-box">
-            <div className="details-header">
-                {/* Heading - City Information */}
-                <div className="header-left">
-                    <h4>{origin} <strong>⇄</strong> {destination}</h4>
-                </div>
-                <div className="header-right">
-                    <p>Round trip - Economy <span className="price">${price.grandTotal}</span></p>
-                </div>
+            <div className="flight-summary">
+                <h3>Flight Details</h3>
+                {itineraries.map((itinerary, idx) => (
+                    <div key={idx}>
+                        {itinerary.segments.map((segment, segIdx) => (
+                            <div key={segIdx} className="flight-segment">
+                                <p>{`${segment.departure.iataCode} → ${segment.arrival.iataCode}`}</p>
+                                <p>{`Carrier: ${segment.carrierCode}`}</p>
+                                <p>{`Flight Number: ${segment.flightNumber}`}</p>
+                            </div>
+                        ))}
+                    </div>
+                ))}
+                <p><strong>Total Price:</strong> {price.total} {price.currency}</p>
             </div>
 
-            {itineraries.map((itinerary, index) => (
-                <div className="itinerary" key={index}>
-                    <h5>{validatingAirlineCodes[0]} {'-'} {index === 0 ? 'Departing flight' : 'Returning flight'} {new Date(itinerary.segments[0].departure.at).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</h5>
-
-                    {itinerary.segments.map((segment, segIndex) => (
-                        <div key={segIndex} className="segment">
-                            <p className="flight-time">
-                                {formatDateTime(segment.departure.at)} <strong>→</strong> {formatDateTime(segment.arrival.at)}
-                            </p>
-                            <p className="flight-airport">
-                                {segment.departure.iataCode} <span className="dot">•</span> {segment.arrival.iataCode}
-                            </p>
-                            <p className="flight-duration">
-                                Travel time: {calculateDuration(segment.departure.at, segment.arrival.at)}
-                            </p>
-
-                            {itinerary.segments.length > 1 && segIndex !== itinerary.segments.length - 1 && (
-                                <p className="layover">Layover: {segment.arrival.iataCode}</p>
-                            )}
+            {isLoading ? (
+                <div className="loading-indicator">Loading seat map, please wait...</div>
+            ) : (
+                seatMapData ? (
+                    <div className="seat-map-container">
+                        <h4>Select Your Seat (Segment {activeSegment + 1} of {seatMapData.length})</h4>
+                        <SeatMap 
+                            seatMapData={seatMapData[activeSegment]} 
+                            onSeatSelect={(seat) => handleSeatSelection(seat, activeSegment, 0)} 
+                            selectedSeat={selectedSeats[`${activeSegment}-0`]}
+                        />
+                        <div className="navigation-buttons">
+                            <button onClick={handlePreviousSegment} disabled={activeSegment === 0}>Previous</button>
+                            <button onClick={handleNextSegment} disabled={activeSegment === seatMapData.length - 1}>Next</button>
                         </div>
-                    ))}
+                    </div>
+                ) : (
+                    <p>Seat Map Not Available for this flight</p>
+                )
+            )}
 
-                    {index < itineraries.length - 1 && <hr className="itinerary-divider" />}
-                </div>
-            ))}
-
-            {/* Additional Information Box */}
-            <div className="additional-info-box">
-                <p>- 1 carry-on bag available for a fee</p>
-                <p>- 1st checked bag available for a fee</p>
-            </div>
-
-            {/* FIXME - Back button
-            <div className="back-button text-center mt-4">
-                <button className="btn btn-secondary" onClick={goBack}>Back to search results</button>
-            </div>
-            */}
-            {/* Confirm button */}
             <div className="confirm-button text-center mt-4">
                 <button onClick={confirmPrice}>Confirm Price and Proceed to Booking</button>
             </div>
