@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/flightCard.css';
 
-const Flights = ({ flight }) => {
+const Flights = ({ flight, handleSelect }) => {
   const { itineraries, price, validatingAirlineCodes } = flight;
   const navigate = useNavigate();
 
@@ -36,8 +36,8 @@ const Flights = ({ flight }) => {
   const returnDuration = finalReturnSegment ? calculateTotalDuration(returnSegment[0].departure.at, finalReturnSegment.arrival.at) : null;
   const returnLayoverLocation = returnSegment.length > 1 ? returnSegment[0].arrival.iataCode : 'Direct';
 
-  const handleSelect = () => {
-    navigate('/flight-details', { state: { flight } });
+  const onSelectFlight = () => {
+    handleSelect(flight); // Call the passed function from props
   };
 
   return (
@@ -61,7 +61,7 @@ const Flights = ({ flight }) => {
         {/* Price and Select Button */}
         <div className="text-center d-flex flex-column align-items-center">
           <h4 className="text-primary mb-2">${price.grandTotal}</h4>
-          <button className="btn btn-primary mt-auto" onClick={() => handleSelect(flight)}>Select</button>
+          <button className="btn btn-primary mt-auto" onClick={onSelectFlight}>Select</button>
         </div>
       </div>
 

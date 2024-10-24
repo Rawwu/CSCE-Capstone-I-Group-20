@@ -43,7 +43,7 @@ const BookingConfirmation = () => {
                   <p><strong>Departure:</strong> {segment.departure.iataCode} (Terminal: {segment.departure.terminal}) at {new Date(segment.departure.at).toLocaleString()}</p>
                   <p><strong>Arrival:</strong> {segment.arrival.iataCode} (Terminal: {segment.arrival.terminal}) at {new Date(segment.arrival.at).toLocaleString()}</p>
                   <p><strong>Flight Number:</strong> {segment.carrierCode} {segment.number}</p>
-                  <p><strong>Class:</strong> {offer.travelerPricings[0].fareDetailsBySegment[segIndex].class}</p>
+                  <p><strong>Class:</strong> {offer.travelerPricings[0].fareDetailsBySegment[segIndex].cabin}</p>
                   <p><strong>Number of Stops:</strong> {segment.numberOfStops}</p>
                   <p><strong>Duration:</strong> {calculateDuration(itinerary.segments)}</p>
                   <hr />

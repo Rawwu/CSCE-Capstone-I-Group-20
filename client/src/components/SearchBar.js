@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import '../styles/searchBar.css'; // Ensure the CSS file is imported
+import '../styles/searchBar.css';
 
 const SearchBar = ({ handleSearch }) => {
   const [from, setFrom] = useState('');
@@ -20,7 +20,6 @@ const SearchBar = ({ handleSearch }) => {
       returnDate: returnDate ? returnDate.toISOString().split('T')[0] : '',
       passengers,
     };
-
     handleSearch(searchParams);
   };
 
@@ -66,12 +65,13 @@ const SearchBar = ({ handleSearch }) => {
       <div className="search-section">
         <label>Passengers:</label>
         <input 
-          type="number" 
-          value={passengers} 
-          onChange={(e) => setPassengers(e.target.value)} 
-          min="1" 
-          required
+            type="number" 
+            value={passengers} 
+            onChange={(e) => setPassengers(parseInt(e.target.value) || 1)} 
+            min="1" 
+            required
         />
+
       </div>
       <button type="submit" className="search-button">Search</button>
     </form>

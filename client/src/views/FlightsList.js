@@ -20,11 +20,11 @@ class FlightsList extends Component {
         {this.state.loading && <p>Loading flights...</p>}
         {this.state.error && <p style={{ color: 'red' }}>{this.state.error}</p>}
         <table className="table">
-          <tbody>
+        <tbody>
             {this.props.flights.map((flight, index) => (
-              <Flights flight={flight} key={index} />
+                <Flights flight={flight} key={index} handleSelect={this.props.handleSelect} />
             ))}
-          </tbody>
+        </tbody>
         </table>
       </div>
     );

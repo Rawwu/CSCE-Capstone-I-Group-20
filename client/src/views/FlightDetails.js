@@ -17,10 +17,17 @@ const FlightDetails = () => {
     const [errorMessage, setErrorMessage] = useState('');
     const [activeSegment, setActiveSegment] = useState(0);
     const [hasFetchedSeatMap, setHasFetchedSeatMap] = useState(false);
+    const [passengerCount, setPassengerCount] = useState(1); // Default to 1 passenger
+
+    useEffect(() => {
+        if (location.state && location.state.passengerCount) {
+            setPassengerCount(location.state.passengerCount);
+        }
+    }, [location.state]);
 
     useEffect(() => {
         const fetchSeatMap = async () => {
-            if (hasFetchedSeatMap) return; // Prevent duplicate calls
+            if (hasFetchedSeatMap) return;
             try {
                 setIsLoading(true);
                 const response = await axios.post('https://y2zghqn948.execute-api.us-east-2.amazonaws.com/Dev/seatmap', {
@@ -41,7 +48,6 @@ const FlightDetails = () => {
             fetchSeatMap();
         }
     }, [flight, hasFetchedSeatMap]);
-
 
     const confirmPrice = async () => {
         try {
@@ -88,13 +94,21 @@ const FlightDetails = () => {
     
             const confirmedPrice = response.data;
             setConfirmedPrice(confirmedPrice);
-            navigate('/booking', { state: { flight: confirmedPrice.flightOffers[0] } });
+    
+            const priceBreakdown = confirmedPrice.flightOffers[0].price.breakdown;
+            navigate('/booking', { 
+                state: { 
+                    flight: confirmedPrice.flightOffers[0], 
+                    selectedSeats, 
+                    priceBreakdown,
+                    passengers: passengerCount 
+                } 
+            });
         } catch (error) {
             console.error('Error confirming flight price:', error);
             setErrorMessage('Unable to confirm the price. Please try again.');
         }
     };
-    
 
     const handleSeatSelection = (seat, itineraryIndex, segIndex) => {
         if (!seat) return;

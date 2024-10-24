@@ -10,13 +10,14 @@ const SearchFlights = () => {
     const [error, setError] = useState(null);
     const location = useLocation();
     const navigate = useNavigate();
-    const { flights: previousFlights } = location.state || {}; // Get previous flights from state
-    const [flights, setFlights] = useState(previousFlights || []); // Use previous flights if available
+    const { flights: previousFlights, passengers: previousPassengers } = location.state || {}; // Get previous data from state
+    const [flights, setFlights] = useState(previousFlights || []);
+    const [passengers, setPassengers] = useState(previousPassengers || 1); // Use previous or default 1
 
     const handleSearch = async (searchParams) => {
         setLoading(true);
         setError(null);
-      
+        
         try {
             const url = `https://y2zghqn948.execute-api.us-east-2.amazonaws.com/Dev/search-flights`;
             const params = {
@@ -26,10 +27,12 @@ const SearchFlights = () => {
                 returnDate: searchParams.returnDate,
                 adults: searchParams.passengers,
             };
-
+    
             const response = await axios.get(url, { params });
             const sortedFlights = response.data.sort((a, b) => a.price - b.price);
             setFlights(sortedFlights.slice(0, 10));
+            setPassengers(searchParams.passengers); // Save passenger count
+        
         } catch (err) {
             console.error('Error searching flights:', err);
             setError("Failed to fetch flight data.");
@@ -39,9 +42,17 @@ const SearchFlights = () => {
     };
 
     const handleSelectFlight = (selectedFlight) => {
-        // Navigate to flight details page with the selected flight and current search results
-        navigate('/flight-details', { state: { flight: selectedFlight, previousFlights: flights } });
-    };    
+        setPassengers((prevPassengers) => {
+            navigate('/flight-details', { 
+                state: { 
+                    flight: selectedFlight, 
+                    passengerCount: prevPassengers,
+                    previousFlights: flights 
+                }
+            });
+            return prevPassengers;
+        });
+    };
 
     return (
         <div>

@@ -1,164 +1,219 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import '../styles/booking.css';
 
 const BookingPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { flight } = location.state || {};
+  const { flight, selectedSeats, passengers = 1 } = location.state || {};
 
-  // Traveler information state
-  const [travelerInfo, setTravelerInfo] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phoneNumber: '',
-    dateOfBirth: '',
-    gender: 'MALE'  // Default value, changeable based on form
-  });
+  // Initialize travelerInfo state based on the number of passengers
+  const [travelerInfo, setTravelerInfo] = useState([]);
 
-  // Check if flight data exists before trying to access properties
+  useEffect(() => {
+    const initialTravelerInfo = Array.from({ length: passengers }, () => ({
+      firstName: '',
+      lastName: '',
+      email: '',
+      phoneNumber: '',
+      dateOfBirth: '',
+      gender: 'MALE'
+    }));
+    setTravelerInfo(initialTravelerInfo);
+  }, [passengers]);
+
   if (!flight || !flight.price) {
-    return <div>Error: Flight details not available.</div>;
+    return <div className="error-message">Error: Flight details not available.</div>;
   }
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (index, e) => {
     const { name, value } = e.target;
-    setTravelerInfo({ ...travelerInfo, [name]: value });
+    const updatedTravelerInfo = [...travelerInfo];
+    updatedTravelerInfo[index][name] = value;
+    setTravelerInfo(updatedTravelerInfo);
   };
 
   const handleBookingSubmit = async (e) => {
     e.preventDefault();
-    
-    // Use the email entered by the user as userId
-    const userId = travelerInfo.email;
+    const userId = travelerInfo[0].email; // Assuming the first traveler's email is the primary identifier
 
     try {
-      const travelers = [
-        {
-          id: "1",
-          dateOfBirth: travelerInfo.dateOfBirth,
-          name: {
-            firstName: travelerInfo.firstName,
-            lastName: travelerInfo.lastName
-          },
-          gender: travelerInfo.gender,
-          contact: {
-            emailAddress: travelerInfo.email,
-            phones: [
-              {
-                deviceType: "MOBILE",
-                countryCallingCode: "1",
-                number: travelerInfo.phoneNumber
-              }
-            ]
-          },
-          documents: [
+      const travelers = travelerInfo.map((info, index) => ({
+        id: (index + 1).toString(),
+        dateOfBirth: info.dateOfBirth,
+        name: {
+          firstName: info.firstName,
+          lastName: info.lastName
+        },
+        gender: info.gender,
+        contact: {
+          emailAddress: info.email,
+          phones: [
             {
-              documentType: "PASSPORT",
-              birthPlace: "New York", // Hardcoded value
-              issuanceLocation: "New York", // Hardcoded value
-              issuanceDate: "2020-01-01", // Hardcoded value
-              number: "123456789", // Hardcoded value
-              expiryDate: "2030-01-01", // Hardcoded value
-              issuanceCountry: "US", // Hardcoded value
-              validityCountry: "US", // Hardcoded value
-              nationality: "US", // Hardcoded value
-              holder: true
+              deviceType: "MOBILE",
+              countryCallingCode: "1",
+              number: info.phoneNumber
             }
           ]
-        }
-      ];
+        },
+        documents: [ // Hardcoded values for testing
+          {
+            documentType: "PASSPORT",
+            birthPlace: "New York",
+            issuanceLocation: "New York",
+            issuanceDate: "2020-01-01",
+            number: "123456789",
+            expiryDate: "2030-01-01",
+            issuanceCountry: "US",
+            validityCountry: "US",
+            nationality: "US",
+            holder: true
+          }
+        ]
+      }));
 
       const response = await axios.post('https://y2zghqn948.execute-api.us-east-2.amazonaws.com/Dev/create-order', {
-        userId,  // Use the email as userId
+        userId,
         flightOffer: flight,
         travelers: travelers
       });
 
-      console.log("Payload being sent to Amadeus API:", {
-        data: {
-          type: "flight-order",
-          flightOffers: [flight],
-          travelers: travelers
-        }
-      });
-
-      console.log('Booking response:', response.data);
-      navigate('/confirmation', { state: { booking: response.data } }); // Redirect to confirmation page
+      navigate('/confirmation', { state: { booking: response.data } });
     } catch (error) {
       console.error('Booking no longer available.', error);
     }
   };
 
-  return (
-    <div>
-      <h1>Booking Details</h1>
-      <p>Total Price: ${flight.price.grandTotal}</p>
+  const renderPriceBreakdown = () => {
+    const { travelerPricings, price } = flight;
+    const breakdown = [];
 
+    if (travelerPricings) {
+      travelerPricings.forEach((traveler, index) => {
+        breakdown.push(
+          <div key={index}>
+            <p>Traveler {index + 1} ({traveler.travelerType}):</p>
+            <p>Base Price: ${traveler.price.base} USD</p>
+            {traveler.price.taxes && traveler.price.taxes.length > 0 && (
+              <ul>
+                {traveler.price.taxes
+                  .filter(tax => tax.code === "US")
+                  .map((tax, i) => (
+                    <li key={i}>
+                      Tax ({tax.code}): ${tax.amount} USD
+                    </li>
+                  ))
+                }
+              </ul>
+            )}
+          </div>
+        );
+      });
+    }
+
+    breakdown.push(
+      <div key="grand-total">
+        {price.fees && price.fees.length > 0 && (
+          <ul>
+            {price.fees.map((fee, i) => (
+              <li key={i}>
+                {fee.type.replace('_', ' ')} Fee: ${fee.amount} USD
+              </li>
+            ))}
+          </ul>
+        )}
+        <p>Grand Total: ${price.grandTotal} USD</p>
+      </div>
+    );
+
+    return breakdown;
+  };
+
+  return (
+    <div className="booking-container">
+      <h1 className="booking-title">Booking Details</h1>
+      
+      {/* Display price breakdown */}
+      <h3>Price Breakdown:</h3>
+      {renderPriceBreakdown()}
+
+      {/* Display selected seats */}
+      <h3>Selected Seats:</h3>
+      {selectedSeats && Object.keys(selectedSeats).map((key, index) => (
+        <p key={index}>Seat {selectedSeats[key].number} on Segment {key}</p>
+      ))}
+
+      <p className="booking-details">Total Price: ${flight.price.grandTotal} USD</p>
+      
       <form onSubmit={handleBookingSubmit}>
-        <label>
-          First Name:
-          <input
-            type="text"
-            name="firstName"
-            value={travelerInfo.firstName}
-            onChange={handleInputChange}
-            required
-          />
-        </label>
-        <label>
-          Last Name:
-          <input
-            type="text"
-            name="lastName"
-            value={travelerInfo.lastName}
-            onChange={handleInputChange}
-            required
-          />
-        </label>
-        <label>
-          Email:
-          <input
-            type="email"
-            name="email"
-            value={travelerInfo.email}
-            onChange={handleInputChange}
-            required
-          />
-        </label>
-        <label>
-          Phone Number:
-          <input
-            type="text"
-            name="phoneNumber"
-            value={travelerInfo.phoneNumber}
-            onChange={handleInputChange}
-            required
-          />
-        </label>
-        <label>
-          Date of Birth:
-          <input
-            type="date"
-            name="dateOfBirth"
-            value={travelerInfo.dateOfBirth}
-            onChange={handleInputChange}
-            required
-          />
-        </label>
-        <label>
-          Gender:
-          <select
-            name="gender"
-            value={travelerInfo.gender}
-            onChange={handleInputChange}
-          >
-            <option value="MALE">Male</option>
-            <option value="FEMALE">Female</option>
-          </select>
-        </label>
-        <button type="submit">Confirm Booking</button>
+        {travelerInfo.map((info, index) => (
+          <div key={index}>
+            <h4>Passenger {index + 1}</h4>
+            <label>
+              First Name:
+              <input
+                type="text"
+                name="firstName"
+                value={info.firstName}
+                onChange={(e) => handleInputChange(index, e)}
+                required
+              />
+            </label>
+            <label>
+              Last Name:
+              <input
+                type="text"
+                name="lastName"
+                value={info.lastName}
+                onChange={(e) => handleInputChange(index, e)}
+                required
+              />
+            </label>
+            <label>
+              Email:
+              <input
+                type="email"
+                name="email"
+                value={info.email}
+                onChange={(e) => handleInputChange(index, e)}
+                required
+              />
+            </label>
+            <label>
+              Phone Number:
+              <input
+                type="text"
+                name="phoneNumber"
+                value={info.phoneNumber}
+                onChange={(e) => handleInputChange(index, e)}
+                required
+              />
+            </label>
+            <label>
+              Date of Birth:
+              <input
+                type="date"
+                name="dateOfBirth"
+                value={info.dateOfBirth}
+                onChange={(e) => handleInputChange(index, e)}
+                required
+              />
+            </label>
+            <label>
+              Gender:
+              <select
+                name="gender"
+                value={info.gender}
+                onChange={(e) => handleInputChange(index, e)}
+              >
+                <option value="MALE">Male</option>
+                <option value="FEMALE">Female</option>
+              </select>
+            </label>
+          </div>
+        ))}
+        <button type="submit" className="submit-button">Confirm Booking</button>
       </form>
     </div>
   );
