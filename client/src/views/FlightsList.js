@@ -16,7 +16,7 @@ class FlightsList extends Component {
   render() {
     return (
       <div>
-        <h3>Flight List</h3>
+        <h3>Available Flights</h3>
         {this.state.loading && <p>Loading flights...</p>}
         {this.state.error && <p style={{ color: 'red' }}>{this.state.error}</p>}
         <table className="table">

@@ -9,6 +9,7 @@
   display: flex;
   flex-direction: column;
   margin-right: 20px;
+  position: relative;
 }
 
 .one-way-container {
@@ -21,7 +22,7 @@
   display: flex;
   align-items: center;
   gap: 5px; /* Use gap for spacing between checkbox and text */
-  cursor: pointer; /* Optional: easier to click */
+  cursor: pointer;
 }
 
 .one-way-container input[type="checkbox"] {
@@ -55,4 +56,28 @@
 
 .search-button:hover {
   background-color: #0056b3;
+}
+
+.suggestions-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  border: 1px solid #ccc;
+  max-height: 150px;
+  overflow-y: auto;
+  position: absolute;
+  background-color: white;
+  width: 200%; /* Adjusted to match the input field width */
+  z-index: 10;
+  top: calc(100% + 5px); /* Add some space below the input */
+  border-radius: 5px;
+}
+
+.suggestions-list li {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.suggestions-list li:hover {
+  background-color: #f0f0f0;
 }
