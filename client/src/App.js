@@ -11,6 +11,8 @@ import Booking from "./views/Booking";
 import BookingConfirmation from "./views/BookingConfirmation";
 import FindBooking from './views/FindBooking';
 import BookingDetails from './views/BookingDetails';
+import ForgotPassword from './views/ForgotPassword';
+import ConfirmResetPassword from './views/ConfirmResetPW';
 import { signOut, getCurrentUser } from 'aws-amplify/auth';
 
 function scrollToFlightDetails() {
@@ -97,6 +99,8 @@ function App() {
                 <Route path="/confirmation" element={<BookingConfirmation />} />
                 <Route path="/find-booking" element={<FindBooking />} />
                 <Route path="/booking-details" element={<BookingDetails />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route path="/confirm-reset-password" element={<ConfirmResetPassword />} />
             </Routes>
         </div>
     );

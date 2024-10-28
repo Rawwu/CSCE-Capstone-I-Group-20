@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { signUp, confirmSignUp } from 'aws-amplify/auth'; // Import both signUp and confirmSignUp
+import { signUp, confirmSignUp } from 'aws-amplify/auth';
 import { useNavigate } from 'react-router-dom';
-import '../styles/register.css';
 
 const Register = () => {
   const [username, setUsername] = useState('');  // This is for custom preferred username
@@ -11,7 +10,7 @@ const Register = () => {
   const [error, setError] = useState(null);
   const [confirmationCode, setConfirmationCode] = useState('');
   const [step, setStep] = useState(1);
-  const navigate = useNavigate(); // Initialize the navigation hook
+  const navigate = useNavigate();
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -23,14 +22,13 @@ const Register = () => {
     }
   
     try {
-      // Use email as the Cognito "username" for signing in
       const { user } = await signUp({
         username: email,  // Using email as the Cognito username
         password,
         attributes: {
           email,  // Cognito required attribute
           phone_number: phoneNumber,  // Optional attribute
-          'custom:display_username': username  // Custom attribute for username
+          'custom:display_username': username  // Custom attribute
         },
       });
   
@@ -62,7 +60,7 @@ const Register = () => {
       alert('User confirmed!');
       setError(null);  // Reset the error
   
-      // Redirect to login page
+      // Redirect to login or user profile page
       navigate('/login');
     } catch (error) {
       setError(error.message);

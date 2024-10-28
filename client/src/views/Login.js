@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signIn } from 'aws-amplify/auth';
-import '../styles/login.css';
 
 function Login({ setIsAuthenticated }) {
   const [email, setEmail] = useState('');
@@ -12,10 +11,9 @@ function Login({ setIsAuthenticated }) {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-        await signIn({ username: email, password });
-
-      setIsAuthenticated(true); // Update authentication state
-      navigate('/'); // Redirect to home page
+      await signIn({ username: email, password });
+      setIsAuthenticated(true);
+      navigate('/');
     } catch (err) {
       setError('Failed to login: ' + err.message);
     }
@@ -45,6 +43,12 @@ function Login({ setIsAuthenticated }) {
           />
         </div>
         <button type="submit" className="btn btn-primary">Login</button>
+        {/* Add Forgot Password Link */}
+        <p>
+          <a href="#" onClick={() => navigate('/forgot-password')}>
+            Forgot Password?
+          </a>
+        </p>
       </form>
     </div>
   );

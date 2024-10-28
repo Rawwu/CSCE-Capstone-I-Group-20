@@ -3,7 +3,7 @@ import '../styles/filters.css';
 
 const Filters = ({ onFilterChange }) => {
   const [directOnly, setDirectOnly] = useState(false);
-  const [maxDuration, setMaxDuration] = useState(24); // Default max of 24 hours
+  const [maxDuration, setMaxDuration] = useState(48); // Default max of 48 hours
   const [sortBy, setSortBy] = useState('cheapest');
 
   const handleDirectChange = (e) => {
@@ -39,7 +39,7 @@ const Filters = ({ onFilterChange }) => {
         <input 
           type="range" 
           min="1" 
-          max="24" 
+          max="48" 
           value={maxDuration} 
           onChange={handleDurationChange} 
         />
