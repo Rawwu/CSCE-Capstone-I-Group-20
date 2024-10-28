@@ -25,14 +25,15 @@ const Filters = ({ onFilterChange }) => {
     <div className="filters-container">
       <h4>Filters</h4>
       
-      <div className="filter-option">
+    <div className="filter-option">
+        <label htmlFor="direct-flights-checkbox">Direct flights only</label>
         <input 
-          type="checkbox" 
-          checked={directOnly} 
-          onChange={handleDirectChange} 
+            type="checkbox" 
+            id="direct-flights-checkbox"
+            checked={directOnly} 
+            onChange={handleDirectChange} 
         />
-        <label>Direct flights only</label>
-      </div>
+    </div>
 
       <div className="filter-option">
         <label>Maximum Trip Duration (hrs):</label>

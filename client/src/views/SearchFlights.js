@@ -113,7 +113,7 @@ const SearchFlights = () => {
     return (
         <div className="search-flights-container">
             <div className="search-header">
-                <h1>Search Flights</h1>
+                <img src="/images/SIFT-Logo-Text-Only.png" alt="SIFT" style={{ height: '50px' }} />
                 <SearchBar handleSearch={handleSearch} />
             </div>
             <div className="filters-and-results">

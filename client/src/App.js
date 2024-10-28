@@ -52,42 +52,44 @@ function App() {
 
     return (
         <div className="container">
-            <nav className="navbar navbar-expand-lg navbar-light bg-light">
-                <Link to="/" className="navbar-brand">SIFT</Link>
-                <div className="collapse navbar-collapse">
-                <ul className="navbar-nav mr-auto">
-                    <li className="navbar-item">
-                    <Link to="/" className="nav-link">Flights</Link>
-                    </li>
-                    {!isAuthenticated ? (
-                    <>
-                        <li className="navbar-item">
-                        <Link to="/login" className="nav-link">Login</Link>
-                        </li>
-                        <li className="navbar-item">
-                        <Link to="/register" className="nav-link">Register</Link>
-                        </li>
-                    </>
-                    ) : (
-                    <>
-                        <li className="navbar-item">
-                        <Link to="/profile" className="nav-link">Profile</Link>
-                        </li>
-                        <li className="navbar-item">
-                        <button className="nav-link btn btn-link" onClick={handleSignOut}>Sign Out</button>
-                        </li>
-                    </>
-                    )}
-                    <li className="navbar-item">
-                    <Link to="/checkout" className="nav-link">Checkout</Link>
-                    </li>
-                    <li className="navbar-item">
-                        <Link to="/find-booking" className="nav-link">Find Booking</Link> {/* Add this link */}
-                    </li>
-                </ul>
-                </div>
-            </nav>
-            <br />
+        <nav className="navbar navbar-expand-lg navbar-light bg-light">
+        <Link to="/" className="navbar-brand">
+            <img src="/images/SIFT-Logo-No-Text.png" alt="SIFT Logo" style={{ height: '60px', marginRight: '10px' }} />
+        </Link>
+          <div className="collapse navbar-collapse justify-content-end"> {/* Aligns links to the right */}
+            <ul className="navbar-nav">
+              <li className="navbar-item">
+                <Link to="/" className="nav-link">Flights</Link>
+              </li>
+              {!isAuthenticated ? (
+                <>
+                  <li className="navbar-item">
+                    <Link to="/login" className="nav-link">Login</Link>
+                  </li>
+                  <li className="navbar-item">
+                    <Link to="/register" className="nav-link">Register</Link>
+                  </li>
+                </>
+              ) : (
+                <>
+                  <li className="navbar-item">
+                    <Link to="/profile" className="nav-link">Profile</Link>
+                  </li>
+                  <li className="navbar-item">
+                    <button className="nav-link btn btn-link" onClick={handleSignOut}>Sign Out</button>
+                  </li>
+                </>
+              )}
+              <li className="navbar-item">
+                <Link to="/checkout" className="nav-link">Checkout</Link>
+              </li>
+              <li className="navbar-item">
+                <Link to="/find-booking" className="nav-link">Find Booking</Link>
+              </li>
+            </ul>
+          </div>
+        </nav>
+        <br />
             <Routes>
                 <Route path="/" element={<SearchFlights  />} />
                 <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
