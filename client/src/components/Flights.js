@@ -1,9 +1,11 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import airlineLogos from '../assets/airlineLogos';
 import '../styles/flightCard.css';
 
 const Flights = ({ flight, handleSelect }) => {
   const { itineraries, price, validatingAirlineCodes } = flight;
+  const airlineLogo = airlineLogos[validatingAirlineCodes[0]] || '/images/logos/default.png';
   const navigate = useNavigate();
 
   // Helper function to format time and date
@@ -46,7 +48,7 @@ const Flights = ({ flight, handleSelect }) => {
         {/* Departure Flight Info */}
         <div className="flex-grow-1">
           <div className="d-flex align-items-center">
-            <span className="me-3"><strong>{validatingAirlineCodes[0]}</strong></span>
+            <img src={airlineLogo} alt={validatingAirlineCodes[0]} className="airline-logo me-3" />
             <span>{departureTime} <strong>→</strong> {arrivalTime}</span>
             <span className="ms-3">{totalDuration}</span>
             <span className="ms-3">{departureSegment.length - 1} stop{departureSegment.length > 2 ? 's' : ''} ({layoverLocation})</span>
@@ -70,7 +72,7 @@ const Flights = ({ flight, handleSelect }) => {
         <div className="card-body d-flex justify-content-between align-items-center mt-2">
           <div className="flex-grow-1">
             <div className="d-flex align-items-center">
-              <span className="me-3"><strong>{validatingAirlineCodes[0]}</strong></span>
+              <img src={airlineLogo} alt={validatingAirlineCodes[0]} className="airline-logo me-3" />
               <span>{returnDepartureTime} <strong>→</strong> {returnArrivalTime}</span>
               <span className="ms-3">{returnDuration}</span>
               <span className="ms-3">{returnSegment.length - 1} stop{returnSegment.length > 2 ? 's' : ''} ({returnLayoverLocation})</span>

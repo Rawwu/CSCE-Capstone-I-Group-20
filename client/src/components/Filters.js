@@ -23,7 +23,7 @@ const Filters = ({ onFilterChange }) => {
 
   return (
     <div className="filters-container">
-      <h4>Filters</h4>
+      <h4>Filter by:</h4>
       
     <div className="filter-option">
         <label htmlFor="direct-flights-checkbox">Direct flights only</label>
