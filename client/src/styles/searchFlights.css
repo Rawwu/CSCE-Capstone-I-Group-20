@@ -1,0 +1,18 @@
+.search-flights-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.filters-and-results {
+    display: flex;
+    gap: 20px; /* Space between filter box and flights list */
+    align-items: flex-start; /* Aligns content at the top */
+}
+
+.filters-and-results .flights-list-container {
+    flex: 1; /* Allows flights list to expand as needed */
+}
+
+.filters-and-results .Filters {
+    min-width: 250px; /* Fixed width for filters to prevent shrinking */
+}

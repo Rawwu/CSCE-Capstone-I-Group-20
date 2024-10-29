@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import '../styles/searchFlights.css';
 import SearchBar from '../components/SearchBar';
 import FlightsList from './FlightsList';
 import Filters from '../components/Filters'; 
