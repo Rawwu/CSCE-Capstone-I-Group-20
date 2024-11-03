@@ -14,7 +14,7 @@ const SearchFlights = () => {
     const { flights: previousFlights, passengers: previousPassengers } = location.state || {}; 
     const [flights, setFlights] = useState(previousFlights || []);
     const [passengers, setPassengers] = useState(previousPassengers || 1); 
-    const [filters, setFilters] = useState({ directOnly: false, maxDuration: 24, sortBy: 'cheapest' });
+    const [filters, setFilters] = useState({ directOnly: false, maxDuration: 48, sortBy: 'cheapest' });
     const [showFilters, setShowFilters] = useState(false); // New state variable to control filter visibility
 
     const handleSearch = async (searchParams) => {

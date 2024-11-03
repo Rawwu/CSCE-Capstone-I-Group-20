@@ -17,7 +17,7 @@ const FlightDetails = () => {
     const [errorMessage, setErrorMessage] = useState('');
     const [activeSegment, setActiveSegment] = useState(0);
     const [hasFetchedSeatMap, setHasFetchedSeatMap] = useState(false);
-    const [passengerCount, setPassengerCount] = useState(1); // Default to 1 passenger
+    const [passengerCount, setPassengerCount] = useState(1);
 
     useEffect(() => {
         if (location.state && location.state.passengerCount) {
@@ -27,26 +27,30 @@ const FlightDetails = () => {
 
     useEffect(() => {
         const fetchSeatMap = async () => {
-            if (hasFetchedSeatMap) return;
+            if (hasFetchedSeatMap || !flight) return;
+
             try {
                 setIsLoading(true);
                 const response = await axios.post('https://y2zghqn948.execute-api.us-east-2.amazonaws.com/Dev/seatmap', {
                     flightOffer: flight
                 });
-                setSeatMapData(response.data.length > 0 ? response.data : null);
-                setHasFetchedSeatMap(true);
+
+                if (response.data.length > 0) {
+                    setSeatMapData(response.data);
+                    setHasFetchedSeatMap(true);
+                } else {
+                    setSeatMapData(null);
+                    setErrorMessage('Seat Map Not Available for this flight');
+                }
             } catch (error) {
                 console.error('Error fetching seat map:', error);
-                setSeatMapData(null);
                 setErrorMessage('Unable to retrieve seat map. Please try again later.');
             } finally {
                 setIsLoading(false);
             }
         };
 
-        if (flight && !hasFetchedSeatMap) {
-            fetchSeatMap();
-        }
+        fetchSeatMap();
     }, [flight, hasFetchedSeatMap]);
 
     const confirmPrice = async () => {
@@ -55,6 +59,8 @@ const FlightDetails = () => {
                 setErrorMessage('Invalid flight data. Please try again.');
                 return;
             }
+    
+            const isTestMode = true; // Set to 'true' to skip seat details in the API call
     
             const updatedFlightOffer = {
                 ...flight,
@@ -69,7 +75,7 @@ const FlightDetails = () => {
                                 fareDetailsBySegment: (traveler.fareDetailsBySegment || []).map(detail => {
                                     let newDetails = { ...detail };
                                     const seatForSegment = selectedSeats[`${itineraryIndex}-${segIndex}`];
-                                    if (seatForSegment) {
+                                    if (seatForSegment && !isTestMode) { // Skip adding seat details in test mode
                                         newDetails.additionalServices = {
                                             ...newDetails.additionalServices,
                                             chargeableSeatNumber: seatForSegment.number
@@ -109,6 +115,7 @@ const FlightDetails = () => {
             setErrorMessage('Unable to confirm the price. Please try again.');
         }
     };
+    
 
     const handleSeatSelection = (seat, itineraryIndex, segIndex) => {
         if (!seat) return;
@@ -165,7 +172,7 @@ const FlightDetails = () => {
                         </div>
                     </div>
                 ) : (
-                    <p>Seat Map Not Available for this flight</p>
+                    <p>{errorMessage}</p>
                 )
             )}
 
