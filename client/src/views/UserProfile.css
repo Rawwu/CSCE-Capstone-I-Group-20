@@ -1,0 +1,38 @@
+.user-input {
+  width: 100%;
+}
+
+.user-input:disabled {
+  border: none;
+  padding-left: 0;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.change-btn {
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
+  user-select: none;
+}
+
+.loyalty-card {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.loyalty-card .title {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.loyalty-box {
+  display: grid;
+  gap: 20px;
+  margin-bottom: 30px;
+}
