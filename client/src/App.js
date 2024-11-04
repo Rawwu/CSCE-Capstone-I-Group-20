@@ -5,7 +5,6 @@ import SearchFlights from './views/SearchFlights';
 import Login from "./views/Login";
 import Register from "./views/Register";
 import UserProfile from "./views/UserProfile";
-import Checkout from "./views/Checkout";
 import FlightDetails from "./views/FlightDetails";
 import Booking from "./views/Booking";
 import BookingConfirmation from "./views/BookingConfirmation";
@@ -84,9 +83,6 @@ function App() {
                 </>
               )}
               <li className="navbar-item">
-                <Link to="/checkout" className="nav-link">Checkout</Link>
-              </li>
-              <li className="navbar-item">
                 <Link to="/find-booking" className="nav-link">Find Booking</Link>
               </li>
             </ul>
@@ -98,7 +94,6 @@ function App() {
                 <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/profile" element={<UserProfile />} />
-                <Route path="/checkout" element={<Checkout />} />
                 <Route path="/flight-details" element={<FlightDetails />} />
                 <Route path="/booking" element={<Booking />} />
                 <Route path="/confirmation" element={<BookingConfirmation />} />
