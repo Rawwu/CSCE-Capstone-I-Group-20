@@ -13,6 +13,7 @@ import FindBooking from './views/FindBooking';
 import BookingDetails from './views/BookingDetails';
 import ForgotPassword from './views/ForgotPassword';
 import ConfirmResetPassword from './views/ConfirmResetPW';
+import FlightPricePredictor from './views/FlightPricePredictor';
 import { signOut, getCurrentUser } from 'aws-amplify/auth';
 
 function scrollToFlightDetails() {
@@ -22,7 +23,7 @@ function scrollToFlightDetails() {
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const navigate = useNavigate(); // Correct placement of useNavigate
+  const navigate = useNavigate();
 
   useEffect(() => {
     const checkUser = async () => {
@@ -39,12 +40,11 @@ function App() {
     checkUser();
   }, []);
 
-  // Function to sign out user
   const handleSignOut = async () => {
     try {
       await signOut();
       setIsAuthenticated(false);
-      navigate('/login'); // Navigate to login or home page after sign out
+      navigate('/login');
     } catch (error) {
       console.error('Error signing out:', error);
     }
@@ -56,10 +56,13 @@ function App() {
         <Link to="/" className="navbar-brand">
             <img src="/images/SIFT-Logo-No-Text.png" alt="SIFT Logo" style={{ height: '60px', marginRight: '10px' }} />
         </Link>
-          <div className="collapse navbar-collapse justify-content-end"> {/* Aligns links to the right */}
+          <div className="collapse navbar-collapse justify-content-end">
             <ul className="navbar-nav">
               <li className="navbar-item">
                 <Link to="/" className="nav-link">Flights</Link>
+              </li>
+              <li className="navbar-item">
+                <Link to="/price-predictor" className="nav-link">Price Predictor</Link>
               </li>
               {!isAuthenticated ? (
                 <>
@@ -103,6 +106,7 @@ function App() {
                 <Route path="/booking-details" element={<BookingDetails />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
                 <Route path="/confirm-reset-password" element={<ConfirmResetPassword />} />
+                <Route path="/price-predictor" element={<FlightPricePredictor />} />
             </Routes>
         </div>
     );
