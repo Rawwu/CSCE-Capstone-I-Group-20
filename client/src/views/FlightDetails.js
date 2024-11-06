@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, useLocation } from 'react-router-dom';
 import '../styles/flightDetails.css';
+import airlineLogos from '../assets/airlineLogos';
 import SeatMap from '../components/SeatMap.js';
 
 const FlightDetails = () => {
@@ -18,6 +19,7 @@ const FlightDetails = () => {
     const [activeSegment, setActiveSegment] = useState(0);
     const [hasFetchedSeatMap, setHasFetchedSeatMap] = useState(false);
     const [passengerCount, setPassengerCount] = useState(1);
+    const airlineLogo = airlineLogos[validatingAirlineCodes[0]] || '/images/logos/default.png';
 
     useEffect(() => {
         if (location.state && location.state.passengerCount) {
@@ -44,7 +46,7 @@ const FlightDetails = () => {
                 }
             } catch (error) {
                 console.error('Error fetching seat map:', error);
-                setErrorMessage('Unable to retrieve seat map. Please try again later.');
+                setErrorMessage('Seat Map Not Available for this flight');
             } finally {
                 setIsLoading(false);
             }
@@ -139,41 +141,55 @@ const FlightDetails = () => {
 
     return (
         <div className="details-box">
-            <div className="flight-summary">
-                <h3>Flight Details</h3>
-                {itineraries.map((itinerary, idx) => (
-                    <div key={idx}>
-                        {itinerary.segments.map((segment, segIdx) => (
-                            <div key={segIdx} className="flight-segment">
-                                <p>{`${segment.departure.iataCode} → ${segment.arrival.iataCode}`}</p>
-                                <p>{`Carrier: ${segment.carrierCode}`}</p>
-                                <p>{`Flight Number: ${segment.flightNumber}`}</p>
-                            </div>
-                        ))}
-                    </div>
-                ))}
-                <p><strong>Total Price:</strong> {price.total} {price.currency}</p>
+            <div className="details-header">
+                <h2>Flight Details</h2>
+                {price && <div className="header-right"><p><strong>Total Price:</strong> ${price.total}</p></div>}
             </div>
+
+            {itineraries ? itineraries.map((itinerary, idx) => (
+            <div key={idx} className="itinerary">
+                <h3>Itinerary {idx + 1}</h3>
+                {itinerary.segments.map((segment, segIdx) => {
+                    // Find the matching fare detail by segment ID
+                    const matchingFareDetail = flight.travelerPricings?.[0]?.fareDetailsBySegment?.find(
+                        fareDetail => fareDetail.segmentId === segment.id
+                    );
+
+                    return (
+                        <div key={segIdx} className="flight-segment">
+                            <h4>{new Date(segment.departure.at).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</h4>
+                            <img src={airlineLogo} alt={validatingAirlineCodes[0]} className="airline-logo me-3" />
+                            <p><strong>{segment.departure.iataCode} → {segment.arrival.iataCode}</strong></p>
+                            <p><strong>Flight:</strong> {segment.carrierCode} {segment.number}</p>
+                            <p><strong>Departure:</strong> {segment.departure.iataCode} at {new Date(segment.departure.at).toLocaleTimeString()}</p>
+                            <p><strong>Arrival:</strong> {segment.arrival.iataCode} at {new Date(segment.arrival.at).toLocaleTimeString()}</p>
+                            <p><strong>Class:</strong> {matchingFareDetail ? matchingFareDetail.cabin : 'N/A'}</p>
+                            <p><strong>Duration:</strong> {calculateDuration(itinerary.segments)}</p>
+                        </div>
+                    );
+                })}
+                {idx < itineraries.length - 1 && <hr className="itinerary-divider" />}
+            </div>
+            )) : <p>No flight details available.</p>}
+
 
             {isLoading ? (
                 <div className="loading-indicator">Loading seat map, please wait...</div>
-            ) : (
-                seatMapData ? (
-                    <div className="seat-map-container">
-                        <h4>Select Your Seat (Segment {activeSegment + 1} of {seatMapData.length})</h4>
-                        <SeatMap 
-                            seatMapData={seatMapData[activeSegment]} 
-                            onSeatSelect={(seat) => handleSeatSelection(seat, activeSegment, 0)} 
-                            selectedSeat={selectedSeats[`${activeSegment}-0`]}
-                        />
-                        <div className="navigation-buttons">
-                            <button onClick={handlePreviousSegment} disabled={activeSegment === 0}>Previous</button>
-                            <button onClick={handleNextSegment} disabled={activeSegment === seatMapData.length - 1}>Next</button>
-                        </div>
+            ) : seatMapData ? (
+                <div className="seat-map-container">
+                    <h4>Select Your Seat (Segment {activeSegment + 1} of {seatMapData.length})</h4>
+                    <SeatMap 
+                        seatMapData={seatMapData[activeSegment]} 
+                        onSeatSelect={(seat) => handleSeatSelection(seat, activeSegment, 0)} 
+                        selectedSeat={selectedSeats[`${activeSegment}-0`]}
+                    />
+                    <div className="navigation-buttons">
+                        <button onClick={handlePreviousSegment} disabled={activeSegment === 0}>Previous</button>
+                        <button onClick={handleNextSegment} disabled={activeSegment === seatMapData.length - 1}>Next</button>
                     </div>
-                ) : (
-                    <p>{errorMessage}</p>
-                )
+                </div>
+            ) : (
+                <p>{errorMessage}</p>
             )}
 
             <div className="confirm-button text-center mt-4">
@@ -181,6 +197,16 @@ const FlightDetails = () => {
             </div>
         </div>
     );
+};
+
+// Helper function to calculate flight duration
+const calculateDuration = (segments) => {
+    const departure = segments[0].departure.at;
+    const arrival = segments[segments.length - 1].arrival.at;
+    const durationMs = new Date(arrival) - new Date(departure);
+    const hours = Math.floor(durationMs / (1000 * 60 * 60));
+    const minutes = Math.floor((durationMs % (1000 * 60 * 60)) / (1000 * 60));
+    return `${hours} hr ${minutes} min`;
 };
 
 export default FlightDetails;

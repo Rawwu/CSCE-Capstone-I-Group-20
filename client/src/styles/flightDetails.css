@@ -5,7 +5,6 @@
     margin-top: 20px;
     background-color: #fefefe;
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
-    position: relative;
 }
 
 .details-header {
@@ -15,70 +14,42 @@
     margin-bottom: 20px;
 }
 
-.header-left h4 {
-    font-weight: bold;
-}
-
-.header-right {
-    text-align: right;
-}
-
-.header-right .price {
-    font-size: 1.2rem;
-    color: #007bff;
-    font-weight: bold;
-}
-
 .itinerary {
     margin-bottom: 20px;
 }
 
-.segment {
-    margin-bottom: 10px;
+.flight-segment {
+    margin-bottom: 15px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
 }
 
-.flight-time {
-    font-size: 1.1rem;
+h4, h3 {
+    color: #007bff;
+    margin-bottom: 8px;
+}
+
+.header-right p {
+    font-size: 1.2rem;
+    color: #333;
     font-weight: bold;
-    margin-bottom: 5px;
+    text-align: right;
 }
 
-.flight-airport {
-    font-size: 0.9rem;
-    color: #555;
+.navigation-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
 }
 
-.flight-duration {
-    font-size: 0.9rem;
-    color: #666;
-}
-
-.layover {
-    font-size: 0.85rem;
-    color: #999;
-    margin-top: 5px;
-}
-
-.itinerary-divider {
-    margin: 20px 0;
-}
-
-.dot {
-    color: #999;
-    font-size: 0.8rem;
-    margin: 0 5px;
-}
-
-/* Additional Info Box */
-.additional-info-box {
-    border-top: 1px solid #ddd;
-    padding-top: 15px;
+.confirm-button {
+    text-align: center;
     margin-top: 20px;
-    font-size: 0.9rem;
-    color: #666;
 }
 
-/* Back Button */
-.back-button {
-    margin-top: 20px;
+.loading-indicator {
+    text-align: center;
+    font-size: 1.1rem;
+    color: #999;
 }
