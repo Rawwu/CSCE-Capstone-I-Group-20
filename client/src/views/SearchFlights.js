@@ -9,18 +9,20 @@ import { useNavigate, useLocation } from 'react-router-dom';
 const SearchFlights = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [showIntro, setShowIntro] = useState(true); // New state to control intro visibility
     const location = useLocation();
     const navigate = useNavigate();
     const { flights: previousFlights, passengers: previousPassengers } = location.state || {}; 
     const [flights, setFlights] = useState(previousFlights || []);
     const [passengers, setPassengers] = useState(previousPassengers || 1); 
     const [filters, setFilters] = useState({ directOnly: false, maxDuration: 48, sortBy: 'cheapest' });
-    const [showFilters, setShowFilters] = useState(false); // New state variable to control filter visibility
+    const [showFilters, setShowFilters] = useState(false);
 
     const handleSearch = async (searchParams) => {
         setLoading(true);
         setError(null);
-        
+        setShowIntro(false); // Hide intro section once the search is initiated
+
         try {
             const url = `https://y2zghqn948.execute-api.us-east-2.amazonaws.com/Dev/search-flights`;
             const params = {
@@ -31,7 +33,6 @@ const SearchFlights = () => {
                 oneWay: searchParams.oneWay ? true : undefined,
             };
     
-            // Only include returnDate if it's not a one-way trip
             if (!searchParams.oneWay && searchParams.returnDate) {
                 params.returnDate = searchParams.returnDate;
             }
@@ -50,7 +51,9 @@ const SearchFlights = () => {
         }
     };
     
-    
+    const handleRegisterClick = () => {
+        navigate('/register');
+    };
 
     const handleSelectFlight = (selectedFlight) => {
         setPassengers((prevPassengers) => {
@@ -117,6 +120,21 @@ const SearchFlights = () => {
                 <img src="/images/SIFT-Logo-Text-Only.png" alt="SIFT" style={{ height: '50px' }} />
                 <SearchBar handleSearch={handleSearch} />
             </div>
+            
+            {/* Introductory Section */}
+            {showIntro && (
+                <div className="intro-section">
+                    <div className="intro-text">
+                        <h2>Find Best Valued Flights</h2>
+                        <p>Discover the most affordable and convenient flights tailored to your travel needs. Sign up to unlock exclusive offers and start your journey with us.</p>
+                        <button onClick={handleRegisterClick} className="register-button">Register Now</button>
+                    </div>
+                    <div className="intro-image">
+                        <img src="/images/airport-outside.jpg" alt="Outside airport" />
+                    </div>
+                </div>
+            )}
+
             <div className="filters-and-results">
                 {showFilters && <Filters onFilterChange={handleFilterChange} />}
                 <div className="flights-list-container">

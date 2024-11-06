@@ -3,16 +3,70 @@
     flex-direction: column;
 }
 
+.intro-section {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    gap: 20px;
+}
+
+.intro-text {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.intro-text h2 {
+    font-size: 1.8rem;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.intro-text p {
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.register-button {
+    padding: 10px 20px;
+    width: 150px;
+    font-size: 1rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.register-button:hover {
+    background-color: #0056b3;
+}
+
+.intro-image {
+    flex: 1;
+}
+
+.intro-image img {
+    max-width: 100%;
+    border-radius: 8px;
+}
+
 .filters-and-results {
     display: flex;
-    gap: 20px; /* Space between filter box and flights list */
-    align-items: flex-start; /* Aligns content at the top */
+    gap: 20px;
+    align-items: flex-start;
+    margin-top: 20px;
 }
 
 .filters-and-results .flights-list-container {
-    flex: 1; /* Allows flights list to expand as needed */
+    flex: 1;
 }
 
 .filters-and-results .Filters {
-    min-width: 250px; /* Fixed width for filters to prevent shrinking */
+    min-width: 250px;
 }
