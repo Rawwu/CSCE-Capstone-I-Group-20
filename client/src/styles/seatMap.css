@@ -1,0 +1,102 @@
+/* Basic layout */
+.seat-map-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+  
+  /* Seat styling */
+  .seat {
+    width: 2em;
+    height: 2em;
+    background-color: #ccc;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 4px;
+    z-index: 1000;
+    position: absolute;
+    border: 1px solid black;
+    padding: 10px;
+    margin: 5px;
+  }
+  
+  /* Available/Unavailable Seats */
+  .available {
+    background-color: #499167;
+  }
+  
+  .unavailable {
+    background-color: #FE5F55;
+  }
+  
+  /* Deck Styling */
+  .deck {
+    border: 2px solid #222;
+    position: relative;
+    margin: 1em 0;
+  }
+  
+  /* Adjust positioning */
+  .seat-group {
+    display: flex;
+    align-items: center;
+  }
+
+  .exit span {
+    display: block;
+    padding: 2px 5px;
+    color: white;
+    font-size: 0.8em;
+    text-align: center;
+    position: absolute;
+    width: 4em;
+    background-color: #499167;
+  }
+  
+  .facility {
+    position: absolute;
+    width: 3em;
+    height: 3em;
+    text-align: center;
+    z-index: 1000;
+    border-radius: 5px;
+    border: 1px solid blue;
+  }
+  
+  .wing {
+    z-index: -1;
+    border: 1px solid #333;
+    opacity: 0.8;
+    position: absolute;
+    background-color: #99B2DD;
+  }
+  
+  .tab-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1em;
+  }
+  
+  .tab {
+    padding: 0.5em 1em;
+    margin: 0 0.2em;
+    cursor: pointer;
+    background-color: #f0f0f0;
+    border: none;
+    border-radius: 4px;
+  }
+  
+  .tab.active {
+    background-color: #499167;
+    color: white;
+  }
+  
+  .seat.selected {
+    background-color: #cce5ff; /* Green to indicate selected */
+    /* color: white;*/
+    border: 2px solid #007BFF;
+}

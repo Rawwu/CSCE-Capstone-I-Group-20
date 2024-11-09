@@ -1,0 +1,80 @@
+.confirmation-box {
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 25px;
+    margin-top: 20px;
+    background-color: #fefefe;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.confirmation-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.confirmation-id {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+}
+
+.section-title {
+    font-size: 1.2rem;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.traveler-list {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.traveler-item {
+    font-size: 1rem;
+    margin-bottom: 5px;
+}
+
+.flight-details {
+    margin-bottom: 20px;
+}
+
+.flight-carrier,
+.flight-price {
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.flight-itinerary-title {
+    font-size: 1.1rem;
+    margin-top: 15px;
+}
+
+.segment-details {
+    margin: 10px 0;
+}
+
+.thank-you {
+    margin-top: 20px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #007bff; /* Optional: Change color for emphasis */
+}
+
+.booking-message {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #28a745; /* Optional: green color for confirmation */
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.flight-date-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.flight-route {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
