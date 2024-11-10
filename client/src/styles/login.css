@@ -1,9 +1,10 @@
 body {
     background-color: white;
+    font-weight: bold;
   }
 
 .loginDiv {
-    background-color: rgb(194, 194, 194);
+    background-color: rgb(75, 75, 75);
     text-align: left;
     border-radius: 20px;
     padding: 45px;
@@ -53,13 +54,16 @@ body {
 }
 .login-card{
   border: 1px solid #fafafa;
+  background-color: rgb(128, 128, 128);
+  color: white;
+  font-weight: bold;
   display: flex;
   align-items: center;
   flex-direction: column;
   justify-content: center;
   padding: 20px 50px;
   border-radius: 20px;
-  box-shadow:  0 5px 8px #ddd;
+  box-shadow:  0 5px 8px #4d4d4d;
 }
 
 .form-div{
@@ -83,7 +87,7 @@ body {
 }
 a{
   text-decoration: none;
-  color: #282c34;
+  color: #ffffff;
   font-size: 14px;
   text-align: center;
   display: flex;
@@ -91,5 +95,6 @@ a{
 }
 .login-wrapper h2{
   border-bottom: 2px solid;
+  font-weight: bold;
   padding-bottom: 5px;
 }
