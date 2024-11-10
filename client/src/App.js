@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link,NavLink, useNavigate } from 'react-router-dom';
 import "bootstrap/dist/css/bootstrap.min.css";
 import SearchFlights from './views/SearchFlights';
 import Login from "./views/Login";
@@ -14,6 +14,7 @@ import ForgotPassword from './views/ForgotPassword';
 import ConfirmResetPassword from './views/ConfirmResetPW';
 import FlightPricePredictor from './views/FlightPricePredictor';
 import { signOut, getCurrentUser } from 'aws-amplify/auth';
+import "./App.css"
 
 function scrollToFlightDetails() {
     const flightDetailsSection = document.getElementById('flight-details-section');
@@ -22,6 +23,7 @@ function scrollToFlightDetails() {
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [open,setIsOpen] = useState(false)
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -50,43 +52,94 @@ function App() {
   };
 
     return (
-        <div className="container">
-        <nav className="navbar navbar-expand-lg navbar-light bg-light">
+        <div className=" main-wrapper">
+        <nav className="navbar navbar-expand-lg px-4 w-[100%] navbar-light bg-light">
         <Link to="/" className="navbar-brand">
             <img src="/images/SIFT-Logo-No-Text.png" alt="SIFT Logo" style={{ height: '60px', marginRight: '10px' }} />
         </Link>
           <div className="collapse navbar-collapse justify-content-end">
             <ul className="navbar-nav">
-              <li className="navbar-item">
-                <Link to="/" className="nav-link">Flights</Link>
+              <li  role='menuitem' className="navbar-item">
+                <NavLink to="/" className="nav-link">Flights</NavLink>
               </li>
-              <li className="navbar-item">
-                <Link to="/price-predictor" className="nav-link">Price Predictor</Link>
+              <li  role='menuitem' className="navbar-item">
+                <NavLink to="/price-predictor" className={({isActive}) => `nav-link ${isActive ? "active": ""}`}>Price Predictor</NavLink>
               </li>
               {!isAuthenticated ? (
                 <>
-                  <li className="navbar-item">
-                    <Link to="/login" className="nav-link">Login</Link>
+                  <li  role='menuitem' className="navbar-item">
+                    <NavLink to="/login" className="nav-link">Login</NavLink>
                   </li>
-                  <li className="navbar-item">
-                    <Link to="/register" className="nav-link">Register</Link>
+                  <li  role='menuitem' className="navbar-item">
+                    <NavLink to="/register" className="nav-link">Register</NavLink>
                   </li>
                 </>
               ) : (
                 <>
-                  <li className="navbar-item">
-                    <Link to="/profile" className="nav-link">Profile</Link>
+                  <li  role='menuitem' className="navbar-item">
+                    <NavLink to="/profile" className="nav-link">Profile</NavLink>
                   </li>
-                  <li className="navbar-item">
+                  <li  role='menuitem' className="navbar-item">
                     <button className="nav-link btn btn-link" onClick={handleSignOut}>Sign Out</button>
                   </li>
                 </>
               )}
-              <li className="navbar-item">
-                <Link to="/find-booking" className="nav-link">Find Booking</Link>
+              <li  role='menuitem' className="navbar-item">
+                <Link to="/find-booking" className="nav-link booking-btn">Find Booking</Link>
               </li>
             </ul>
           </div>
+          <button
+          className="menu-btn"
+          onClick={() => setIsOpen(true)} 
+          aria-expanded={open}
+          aria-controls="mobile-nav"
+          aria-label={open ? "Close menu" : "Open menu"}
+        >
+          <span className="sr-only">{open ? "Close menu" : "Open menu"}</span>
+        </button>
+
+        
+  <div className={`mobile-nav ${open ? 'open' : ''}`}>
+         <button
+            // className="close-btn"
+            className='close-menu'
+            onClick={() => setIsOpen(false)} 
+            aria-label="Close menu"
+          >
+            <span className="sr-only">Close menu</span>
+          </button>
+   <ul>
+     <li  role='menuitem'>
+     <Link to="/" className="nav-link">Flights</Link>
+     </li>
+     <li  role='menuitem'>
+     <Link to="/price-predictor" className="nav-link">Price Predictor</Link>
+     </li>
+     {!isAuthenticated ? (
+     <>
+       <li  role='menuitem' className="navbar-item">
+         <Link to="/login" className="nav-link">Login</Link>
+       </li>
+       <li  role='menuitem' className="navbar-item">
+         <Link to="/register" className="nav-link">Register</Link>
+       </li>
+     </>
+   ) : (
+     <>
+       <li  role='menuitem' className="navbar-item">
+         <Link to="/profile" className="nav-link">Profile</Link>
+       </li>
+       <li  role='menuitem' className="navbar-item">
+         <button className="nav-link btn btn-link" onClick={handleSignOut}>Sign Out</button>
+       </li>
+     </>
+   )}
+     <li  role='menuitem' className="navbar-item">
+     <Link to="/find-booking" className="nav-link booking-btn">Find Booking</Link>
+   </li>
+   </ul>
+</div>         
         </nav>
         <br />
             <Routes>

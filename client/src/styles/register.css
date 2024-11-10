@@ -39,3 +39,45 @@
     width: 50%;
     font-size: 16px;
   }
+
+.register-wrapper{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+  
+    
+}
+.register-card{
+    border: 1px solid #fafafa;
+    margin: 0 10px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    padding: 20px 50px;
+    border-radius: 20px;
+    box-shadow:  0 5px 8px #ddd;
+}
+.form-div{
+  display: flex;
+  align-items: start;
+  flex-direction: column;
+  background-color: #fafafa;
+  padding: 10px 15px;
+  border-radius: 10px;
+  width: 100%;
+}
+.form-div input{
+  width: 250px;
+}
+.reg-btn{
+  background-color: #61dafb;
+  color: #282c34;
+}
+.reg-btn:hover{
+  opacity: 80%;
+  background-color: #61dafb;
+}

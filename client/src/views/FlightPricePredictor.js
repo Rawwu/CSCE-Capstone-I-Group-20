@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import "../styles/FlightPricePredictor.css"
 
 const FlightPricePredictor = () => {
   const [predictions, setPredictions] = useState([]);
@@ -56,10 +57,10 @@ const FlightPricePredictor = () => {
   };
 
   return (
-    <div className="container mt-4">
+    <div className="predictor-wrapper mt-4">
       <div className="row justify-content-center">
         <div className="col-md-8">
-          <div className="card">
+          <div className="my-card">
             <div className="card-header">
               <h2 className="text-center">Flight Price Predictor</h2>
             </div>
@@ -153,7 +154,7 @@ const FlightPricePredictor = () => {
                 <div className="text-center">
                   <button 
                     type="submit" 
-                    className="btn btn-primary"
+                    className="btn  pred-button"
                     disabled={loading}
                   >
                     {loading ? 'Predicting...' : 'Predict Prices'}

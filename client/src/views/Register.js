@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { signUp, confirmSignUp } from 'aws-amplify/auth';
 import { useNavigate } from 'react-router-dom';
+import "../styles/register.css"
 
 const Register = () => {
   const [username, setUsername] = useState('');  // This is for custom preferred username
@@ -70,12 +71,12 @@ const Register = () => {
   
 
   return (
-    <div>
+    <div className='register-wrapper'>
       {step === 1 && (
-        <div>
+        <div className='register-card'>
           <h2>Register</h2>
           <form onSubmit={handleRegister}>
-            <div>
+            <div className='form-div'>
               <label htmlFor="username">Username:</label>
               <input
                 type="text"
@@ -84,7 +85,7 @@ const Register = () => {
                 onChange={(e) => setUsername(e.target.value)}
               />
             </div>
-            <div>
+            <div className='form-div'>
               <label htmlFor="password">Password:</label>
               <input
                 type="password"
@@ -93,7 +94,7 @@ const Register = () => {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
-            <div>
+            <div className='form-div'>
               <label htmlFor="email">Email:</label>
               <input
                 type="email"
@@ -102,7 +103,7 @@ const Register = () => {
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
-            <div>
+            <div className='form-div'>
               <label htmlFor="phoneNumber">Phone Number (optional):</label>
               <input
                 type="tel"
@@ -111,7 +112,7 @@ const Register = () => {
                 onChange={(e) => setPhoneNumber(e.target.value)}
               />
             </div>
-            <button type="submit">Register</button>
+            <button type="submit" className='reg-btn'>Register</button>
           </form>
           {error && <p>{error}</p>}
         </div>

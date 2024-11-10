@@ -40,3 +40,56 @@ body {
     color: rgb(51, 51, 51);
     text-align: center;
   }
+
+.login-wrapper{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+
+  
+}
+.login-card{
+  border: 1px solid #fafafa;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  padding: 20px 50px;
+  border-radius: 20px;
+  box-shadow:  0 5px 8px #ddd;
+}
+
+.form-div{
+  display: flex;
+  align-items: start;
+  flex-direction: column;
+  background-color: #fafafa;
+  padding: 10px 15px;
+  border-radius: 10px;
+}
+.btn-login{
+  background-color: #61dafb;
+}
+.btn-login:hover{
+  opacity: 80%;
+  background-color: #61dafb;
+
+}
+.form-div label{
+  padding-bottom: 10px;
+}
+a{
+  text-decoration: none;
+  color: #282c34;
+  font-size: 14px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+}
+.login-wrapper h2{
+  border-bottom: 2px solid;
+  padding-bottom: 5px;
+}

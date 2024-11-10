@@ -1,32 +1,38 @@
 .search-bar-container {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-betwee;
+  padding: 0 10px;
   flex-wrap: wrap; /* Allow wrapping to ensure elements align nicely */
 }
 
 .search-section {
   display: flex;
   flex-direction: column;
-  margin-right: 20px;
+  margin-right: 10px;
   position: relative;
 }
 
 .one-way-container {
   display: flex;
-  align-items: center;
-  margin-top: 10px; /* Adjust spacing if needed */
+  align-items: end;
+  justify-content: center;
+  margin-top: 10px;
+   /* Adjust spacing if needed */
 }
 
 .one-way-container label {
   display: flex;
   align-items: center;
+  flex-direction: row;
+  justify-content: center;
   gap: 5px; /* Use gap for spacing between checkbox and text */
   cursor: pointer;
 }
 
 .one-way-container input[type="checkbox"] {
   margin: 0; /* Remove any default margin */
+
 }
 
 .search-section label {

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signIn } from 'aws-amplify/auth';
+import "../styles/login.css"
 
 function Login({ setIsAuthenticated }) {
   const [email, setEmail] = useState('');
@@ -20,12 +21,13 @@ function Login({ setIsAuthenticated }) {
   };
 
   return (
-    <div>
+    <div className='login-wrapper'>
+      <div className='login-card'>
       <h2>Login</h2>
       {error && <p style={{ color: 'red' }}>{error}</p>}
       <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label>Email:</label>
+        <div className="form-div">
+          <label>Email</label>
           <input
             type="email"
             className="form-control"
@@ -33,7 +35,7 @@ function Login({ setIsAuthenticated }) {
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>
-        <div className="form-group">
+        <div className="form-div">
           <label>Password:</label>
           <input
             type="password"
@@ -42,14 +44,15 @@ function Login({ setIsAuthenticated }) {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        <button type="submit" className="btn btn-primary">Login</button>
+        <button type="submit" className="btn btn-login">Login</button>
         {/* Add Forgot Password Link */}
         <p>
           <a href="#" onClick={() => navigate('/forgot-password')}>
-            Forgot Password?
+            Forgot password?
           </a>
         </p>
       </form>
+      </div>
     </div>
   );
 }
