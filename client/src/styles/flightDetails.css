@@ -13,7 +13,9 @@
     align-items: center;
     margin-bottom: 20px;
 }
-
+.testing{
+    display:flex;
+}
 .itinerary {
     margin-bottom: 20px;
 }
