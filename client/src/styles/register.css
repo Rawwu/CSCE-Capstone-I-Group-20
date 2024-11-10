@@ -46,11 +46,14 @@
     justify-content: center;
     flex-direction: column;
     gap: 10px;
+    font-weight: bold;
     margin-top: 10px;
   
     
 }
 .register-card{
+    background-color: rgb(128, 128, 128);
+    color: white;
     border: 1px solid #fafafa;
     margin: 0 10px;
     display: flex;
@@ -59,7 +62,7 @@
     justify-content: center;
     padding: 20px 50px;
     border-radius: 20px;
-    box-shadow:  0 5px 8px #ddd;
+    box-shadow:  0 5px 8px #4d4d4d;
 }
 .form-div{
   display: flex;
@@ -75,7 +78,9 @@
 }
 .reg-btn{
   background-color: #61dafb;
-  color: #282c34;
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 35px;
 }
 .reg-btn:hover{
   opacity: 80%;
