@@ -75,6 +75,9 @@ const BookingPage = () => {
         const { bookingId } = createOrderResponse.data;
         localStorage.setItem('email', userId);
         localStorage.setItem('bookingId', bookingId);
+        if (!bookingId) {
+            throw new Error("No bookingId returned from create order response.");
+        }
 
         // Now, create the checkout session with bookingId
         const createSessionResponse = await axios.post(

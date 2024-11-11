@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { v4 as uuidv4 } from 'uuid';
 import { useNavigate, useLocation } from 'react-router-dom';
 import '../styles/flightDetails.css';
 import airlineLogos from '../assets/airlineLogos';
@@ -62,62 +63,46 @@ const FlightDetails = () => {
                 return;
             }
     
-            const isTestMode = true; // Set to 'true' to skip seat details in the API call
+            const bookingId = uuidv4(); // Generate a unique bookingId
     
-            const updatedFlightOffer = {
-                ...flight,
-                itineraries: (flight.itineraries || []).map((itinerary, itineraryIndex) => ({
-                    ...itinerary,
-                    segments: (itinerary.segments || []).map((segment, segIndex) => {
-                        let updatedFareDetails = (segment.travelerPricings || []).map(traveler => {
-                            if (!traveler.fareDetailsBySegment) return traveler;
-    
-                            return {
-                                ...traveler,
-                                fareDetailsBySegment: (traveler.fareDetailsBySegment || []).map(detail => {
-                                    let newDetails = { ...detail };
-                                    const seatForSegment = selectedSeats[`${itineraryIndex}-${segIndex}`];
-                                    if (seatForSegment && !isTestMode) { // Skip adding seat details in test mode
-                                        newDetails.additionalServices = {
-                                            ...newDetails.additionalServices,
-                                            chargeableSeatNumber: seatForSegment.number
-                                        };
-                                    }
-                                    return newDetails;
-                                })
-                            };
-                        });
-    
-                        return {
-                            ...segment,
-                            travelerPricings: updatedFareDetails
-                        };
-                    })
-                }))
-            };
-    
+            // Try to confirm price using Amadeus API first
             const response = await axios.post('https://y2zghqn948.execute-api.us-east-2.amazonaws.com/Dev/price-flight', {
-                flightOffer: updatedFlightOffer
+                flightOffer: flight
             });
     
+            // If successful, use the confirmed price from Amadeus
             const confirmedPrice = response.data;
-            setConfirmedPrice(confirmedPrice);
-    
             const priceBreakdown = confirmedPrice.flightOffers[0].price.breakdown;
-            navigate('/booking', { 
-                state: { 
-                    flight: confirmedPrice.flightOffers[0], 
-                    selectedSeats, 
+    
+            navigate('/booking', {
+                state: {
+                    flight: confirmedPrice.flightOffers[0],
+                    bookingId,
+                    selectedSeats,
                     priceBreakdown,
-                    passengers: passengerCount 
-                } 
+                    passengers: passengerCount
+                }
             });
         } catch (error) {
-            console.error('Error confirming flight price:', error);
-            setErrorMessage('Unable to confirm the price. Please try again.');
-        }
-    };
+            console.error('Error confirming flight price with Amadeus API:', error);
     
+            // If Amadeus API call fails, fall back to the local price
+            if (price && price.total) {
+                setErrorMessage('Unable to confirm the price with the provider. Proceeding with the displayed price.');
+                navigate('/booking', {
+                    state: {
+                        flight,
+                        bookingId: uuidv4(),
+                        selectedSeats,
+                        priceBreakdown: price.breakdown,
+                        passengers: passengerCount
+                    }
+                });
+            } else {
+                setErrorMessage('Unable to confirm the price. Please try again later.');
+            }
+        }
+    };    
 
     const handleSeatSelection = (seat, itineraryIndex, segIndex) => {
         if (!seat) return;
