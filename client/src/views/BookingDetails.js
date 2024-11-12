@@ -1,10 +1,12 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import '../styles/bookingConfirmation.css';  // Custom CSS for booking confirmation
 
 const BookingDetails = () => {
   const location = useLocation();
-  const { booking } = location.state || {}; // Retrieve booking data passed from previous page
+  const navigate = useNavigate();
+  const { booking, email } = location.state || {}; // Retrieve booking data passed from previous page
 
   if (!booking) {
     return <div>Error: Booking details not available.</div>;
@@ -19,6 +21,20 @@ const BookingDetails = () => {
 
   // Extract relevant details from the parsed flightDetails
   const { travelerPricings, itineraries, price } = flightDetails[0];
+
+
+  const handleCancelBooking = async () => {
+    try {
+      await axios.delete('https://y2zghqn948.execute-api.us-east-2.amazonaws.com/Dev/delete-booking', {
+        data: { bookingId: booking.bookingId, email }
+      });
+      alert('Booking successfully canceled.');
+      navigate('/');  // Redirect to home or another page after cancellation
+    } catch (error) {
+      console.error('Error canceling booking:', error);
+      alert('Error canceling booking. Please try again.');
+    }
+  };
 
   return (
     <div className="confirmation-box">
@@ -51,7 +67,7 @@ const BookingDetails = () => {
                 <p><strong>Departure:</strong> {segment.departure.iataCode} (Terminal: {segment.departure.terminal}) at {new Date(segment.departure.at).toLocaleString()}</p>
                 <p><strong>Arrival:</strong> {segment.arrival.iataCode} (Terminal: {segment.arrival.terminal}) at {new Date(segment.arrival.at).toLocaleString()}</p>
                 <p><strong>Flight Number:</strong> {segment.carrierCode} {segment.number}</p>
-                <p><strong>Class:</strong> {travelerPricings[0].fareDetailsBySegment[segIndex].class}</p>
+                <p><strong>Class:</strong> {travelerPricings[0].fareDetailsBySegment[segIndex].cabin}</p>
                 <p><strong>Number of Stops:</strong> {segment.numberOfStops}</p>
                 <p><strong>Duration:</strong> {calculateDuration(itinerary.segments)}</p>
                 <hr />
@@ -64,6 +80,7 @@ const BookingDetails = () => {
       )}
 
       <h3 className="thank-you">Thank you for choosing our service!</h3>
+      <button className="btn btn-danger" onClick={handleCancelBooking}>Cancel Booking</button>
     </div>
   );
 };
