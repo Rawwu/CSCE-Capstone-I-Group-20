@@ -18,9 +18,9 @@ const FindBooking = () => {
                 params: { bookingId, email }
             });
             setBooking(response.data);
-            navigate('/booking-details', { state: { booking: response.data } }); // Redirect to confirmation page
+            navigate('/booking-details', { state: { booking: response.data, email  } }); // Redirect to confirmation page
         } catch (err) {
-            setError('Booking not found or error retrieving booking.');
+            setError('Booking not found');
         }
     };
 
