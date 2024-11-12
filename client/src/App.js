@@ -89,26 +89,19 @@ function App() {
               </li>
             </ul>
           </div>
-          <button
-          className="menu-btn"
-          onClick={() => setIsOpen(true)} 
-          aria-expanded={open}
-          aria-controls="mobile-nav"
-          aria-label={open ? "Close menu" : "Open menu"}
-        >
-          <span className="sr-only">{open ? "Close menu" : "Open menu"}</span>
-        </button>
+    
+          <span className="menu-btn"></span>
 
         
   <div className={`mobile-nav ${open ? 'open' : ''}`}>
-         <button
+         <span
             // className="close-btn"
-            className='close-menu'
+            className='close-btn'
             onClick={() => setIsOpen(false)} 
-            aria-label="Close menu"
+            // aria-label="Close menu"
           >
-            <span className="sr-only">Close menu</span>
-          </button>
+            {/* <span className="sr-only">Close menu</span> */}
+          </span>
    <ul>
      <li  role='menuitem'>
      <Link to="/" className="nav-link">Flights</Link>
@@ -142,6 +135,7 @@ function App() {
 </div>         
         </nav>
         <br />
+        <div className='body'>
             <Routes>
                 <Route path="/" element={<SearchFlights  />} />
                 <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
@@ -156,6 +150,7 @@ function App() {
                 <Route path="/confirm-reset-password" element={<ConfirmResetPassword />} />
                 <Route path="/price-predictor" element={<FlightPricePredictor />} />
             </Routes>
+            </div>
         </div>
     );
 }

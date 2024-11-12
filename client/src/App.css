@@ -12,6 +12,9 @@
     animation: App-logo-spin infinite 20s linear;
   }
 }
+nav{
+  padding-left: 30%;
+}
 .nav-link.active{
   border-bottom: 2px solid #282c34;
   color: #282c34;

@@ -1,6 +1,8 @@
 .search-flights-container {
     display: flex;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .intro-section {
@@ -18,6 +20,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    max-width: 600px;
 }
 
 .intro-text h2 {
@@ -49,6 +52,7 @@
 
 .intro-image {
     flex: 1;
+    max-width: 600px;
 }
 
 .intro-image img {
