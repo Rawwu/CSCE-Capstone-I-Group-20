@@ -90,7 +90,9 @@ function App() {
             </ul>
           </div>
     
-          <span className="menu-btn"></span>
+          <span
+          onClick={() => setIsOpen(true)} 
+          className="menu-bar"></span>
 
         
   <div className={`mobile-nav ${open ? 'open' : ''}`}>
