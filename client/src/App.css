@@ -1,152 +1,77 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-nav{
-  padding-left: 30%;
-}
-.nav-link.active{
-  border-bottom: 2px solid #282c34;
-  color: #282c34;
-}
-.booking-btn{
-  background-color: #61dafb;
-  padding: 5px 10px;
+.navbar {
+  max-width: 1300px; /* Width to match other components */
+  margin: 0 auto;
+  padding: 0 20px;
   border-radius: 8px;
-  font-weight: 300;
-  margin-left: 30px;
-}
-.close-menu{
-  position: absolute;
-  right: 0;
-  top: 0;
-  cursor: pointer;
-  margin-right: 30px;
-  transform: rotate(45deg);
-  margin-top: 50px;
- 
- 
-}
-.menu-bar{
-  background-color: #282c34;
-  width: 30px;
-  height: 4px;
-  position: relative;
-  cursor: pointer;
-}
-.menu-bar::after{
-  content: "";
-  position: absolute;
-  top: 8px;
-  background-color: #282c34;
-  width: 20px;
-  height: 3px;
-  cursor: pointer;
-}
-.menu-bar::before{
-  content: "";
-  position: absolute;
-  top: 16px;
-  background-color: #282c34;
-  width: 10px;
-  height: 2px;
-  cursor: pointer;
 }
 
+.navbar-brand img {
+  height: 50px;
+  margin-right: 10px;
+}
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-li{
-  list-style: none;
-}
-.mobile-nav{
-  position: absolute;
-  transform: translateX(100%);
-  transition: transform 0.5s ease;
-  height: 400px;
-  z-index: 1000;
-  width: 50%;
-  right: 0;
-  background-color: #61dafb;
-  top: 0;
-  border-bottom-left-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-}
-.mobile-nav ul li{
-  padding-top:20px;
-  text-transform: uppercase;
+.navbar .navbar-nav .nav-link {
+  font-size: 1rem;
   font-weight: 500;
+  color: #282c34;
+  transition: color 0.3s ease;
 }
-.mobile-nav ul li .booking-btn{
-  background-color: white;
-  margin-left: 0px;
-}
-.mobile-nav.open {
-  transform: translateX(0);
-}
-.close-btn{
-  position: absolute;
-  right: 0;
-  top: 0;
-  cursor: pointer;
-  margin-right: 30px;
-  transform: rotate(45deg);
-  margin-top: 30px;
-  width: 30px;
-  height: 4px;
-  background-color: white;
-}
-.close-btn::after{
-  content: "";
-  position: absolute;
-  right: 0;
-  cursor: pointer;
-  top: 0;
-  width: 30px;
-  height: 4px;
-  background-color: white;
-  transform: rotate(-90deg); 
- 
-}
-.App-link {
+
+.navbar .navbar-nav .nav-link:hover {
   color: #61dafb;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-@media screen and (min-width:980px){
-  .menu-bar{
-    display: none;
-  }
-  .mobile-nav{
-    display: none;
-  }
+.booking-btn {
+  background-color: #61dafb;
+  padding: 6px 12px;
+  border-radius: 5px;
+  font-weight: 500;
+  margin-left: 20px;
+  color: white;
 }
 
+.navbar-item {
+  margin: 0 10px;
+}
+
+.main-wrapper {
+  padding-top: 20px; /* Space between nav and content */
+}
+
+.navbar-toggler {
+  border: none;
+}
+
+/* Mobile nav adjustments */
+.menu-bar, .close-btn {
+  display: block;
+  cursor: pointer;
+}
+
+/* General styling for nav items */
+.navbar .navbar-nav .nav-link,
+.navbar .navbar-nav .btn-link {
+font-size: 1rem;
+font-weight: 500;
+color: #282c34;
+text-align: center;
+width: 100%;
+padding: 8px;
+transition: color 0.3s ease;
+}
+
+/* Styling for hover effect */
+.navbar .navbar-nav .nav-link:hover,
+.navbar .navbar-nav .btn-link:hover {
+color: #61dafb;
+}
+
+@media screen and (max-width: 980px) {
+  .navbar .navbar-nav .nav-item {
+      text-align: center;
+      width: 100%;
+  }
+  .navbar .navbar-nav .nav-link {
+    padding: 8px;
+  }
+}

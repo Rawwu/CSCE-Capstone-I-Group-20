@@ -3,37 +3,42 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+
 }
 
-.intro-section {
+/* Introductory and Info Sections */
+.intro-section, .info-section {
     display: flex;
     justify-content: space-between;
+    align-items: center; /* Center content vertically */
     margin-top: 20px;
-    padding: 20px;
     background-color: #f9f9f9;
+    padding: 20px;
     border-radius: 8px;
+    width: 100%;
+    max-width: 1300px; /* Matches the width of the navigation bar */
     gap: 20px;
 }
 
-.intro-text {
+/* Text area within Intro and Info sections */
+.intro-text, .info-content {
     flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    max-width: 600px;
 }
 
-.intro-text h2 {
+.intro-text h2, .info-section h3 {
     font-size: 1.8rem;
     color: #333;
     margin-bottom: 10px;
 }
 
-.intro-text p {
+.intro-text p, .info-content p {
     font-size: 16px;
-    font-weight: 400;
     color: #666;
     margin-bottom: 20px;
+    line-height: 1.5;
 }
 
 .register-button {
@@ -51,13 +56,25 @@
     background-color: #0056b3;
 }
 
-.intro-image {
+/* Image container for intro and info sections */
+.intro-image{
     flex: 1;
-    max-width: 600px;
+    display: flex;
+    justify-content: flex-end; /* Align image to the right in the section */
+    max-width: 550px;
 }
 
-.intro-image img {
+.info-image {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end; /* Align image to the right in the section */
+    max-width: 400px;
+}
+
+/* Image styling */
+.intro-image img, .info-image img {
     max-width: 100%;
+    height: auto;
     border-radius: 8px;
 }
 
@@ -74,4 +91,131 @@
 
 .filters-and-results .Filters {
     min-width: 250px;
+}
+
+/* Informative Section */
+.info-section {
+    background-color: #f4f4f4;
+    text-align: center; /* Align text to the left */
+    height: 400px;
+}
+
+.info-content {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.info-content p {
+    font-size: 16px;
+    color: #666;
+    line-height: 1.6;
+}
+
+.info-image {
+    max-width: 250px; /* Limit size of image in info box */
+    flex-shrink: 0;
+    margin-left: 20px; /* Space between text and image */
+}
+
+/* Flight Price Predictor Section */
+.price-predictor-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #f1f1f1;
+    border-radius: 8px;
+    max-width: 1300px;
+    width: 100%;
+    gap: 20px;
+}
+
+/* Left side image styling */
+.predictor-image {
+    flex: 1;
+    max-width: 400px;
+}
+
+.predictor-image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+/* Right side content styling */
+.predictor-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.predictor-content h3 {
+    font-size: 1.8rem;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.predictor-content p {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+.predictor-button {
+    padding: 10px 20px;
+    width: 180px;
+    font-size: 1rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.predictor-button:hover {
+    background-color: #0056b3;
+}
+
+/* Footer */
+.footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.footer p {
+    margin: 0;
+    font-size: 14px;
+}
+
+.footer-links,
+.social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.footer-links a,
+.social-icons a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.footer-links a:hover,
+.social-icons a:hover {
+    text-decoration: underline;
+}
+
+.social-icons img {
+    width: 20px;
+    height: 20px;
 }

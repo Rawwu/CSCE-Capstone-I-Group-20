@@ -4,6 +4,7 @@
   justify-content: space-betwee;
   padding: 0 10px;
   flex-wrap: wrap; /* Allow wrapping to ensure elements align nicely */
+  margin-bottom: 70px;
 }
 
 .search-section {

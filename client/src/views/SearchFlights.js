@@ -55,6 +55,10 @@ const SearchFlights = () => {
         navigate('/register');
     };
 
+    const handlePredictorClick = () => {
+        navigate('/price-predictor');
+    };
+
     const handleSelectFlight = (selectedFlight) => {
         setPassengers((prevPassengers) => {
             navigate('/flight-details', { 
@@ -135,6 +139,34 @@ const SearchFlights = () => {
                 </div>
             )}
 
+            {/* Flight Price Predictor Section */}
+            {showIntro && (
+            <div className="price-predictor-section">
+                <div className="predictor-image">
+                    <img src="/images/bot.jpg" alt="Price Predictor" />
+                </div>
+                <div className="predictor-content">
+                    <h3>Flight Price Predictor</h3>
+                    <p>
+                        Enter your origin and destination to find the cheapest dates to fly! Our Flight Price Predictor analyzes fare trends to help you pick the best day to book.
+                    </p>
+                    <button onClick={handlePredictorClick} className="predictor-button">Explore Predictor</button>
+                </div>
+            </div>
+            )}
+
+            {/* Informative Section */}
+            {showIntro && (
+                <div className="info-section">
+                    
+                    <div className="info-content">
+                        <h3>Why Choose Our Platform?</h3>
+                        <p>With our advanced search technology, we bring you the best flight options available. Enjoy hassle-free booking, exclusive deals, and secure payment options. Your journey starts here!</p>
+                    </div>
+                </div>
+            )}
+
+            {/* Filter Section */}
             <div className="filters-and-results">
                 {showFilters && <Filters onFilterChange={handleFilterChange} />}
                 <div className="flights-list-container">
@@ -143,6 +175,28 @@ const SearchFlights = () => {
                     {flights.length > 0 && <FlightsList flights={applyFilters(flights)} handleSelect={handleSelectFlight} />}
                 </div>
             </div>
+
+            {/* Footer Section */}
+            <footer className="footer">
+                <p>&copy; 2024 SIFT Flights. All rights reserved.</p>
+                <div className="footer-links">
+                    <a href="/about">About</a>
+                    <a href="/contact">Contact</a>
+                    <a href="/privacy">Privacy Policy</a>
+                    <a href="/terms">Terms of Service</a>
+                </div>
+                <div className="social-icons">
+                    <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
+                        <img src="/images/facebook.webp" alt="Facebook" />
+                    </a>
+                    <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
+                        <img src="/images/twitter.svg" alt="Twitter" />
+                    </a>
+                    <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+                        <img src="/images/instagram.webp" alt="Instagram" />
+                    </a>
+                </div>
+            </footer>
         </div>
     );
 };
