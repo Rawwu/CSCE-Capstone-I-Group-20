@@ -16,6 +16,14 @@
     flex-direction: column;
     gap: 5px;
   }
+
+  .label1 {
+    color: white;
+  }
+
+  .text-muted {
+    color: rgb(99, 99, 99);
+  }
   
   .form-group input {
     padding: 8px;
