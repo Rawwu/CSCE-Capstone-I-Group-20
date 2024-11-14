@@ -1,0 +1,26 @@
+.find-booking-container {
+    background-color: rgb(75, 75, 75);
+    text-align: left;
+    border-radius: 20px;
+    padding: 45px;
+}
+
+.findbooking-card {
+  border: 1px solid #fafafa;
+  background-color: rgb(128, 128, 128);
+  color: white;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  padding: 20px 50px;
+  border-radius: 20px;
+  box-shadow:  0 5px 8px #4d4d4d;
+}
+
+.btn-primary {
+    background-color: #61dafb;
+    padding-left: 35px;
+    padding-right: 35px;
+}
