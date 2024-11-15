@@ -1,7 +1,8 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import '../styles/bookingConfirmation.css';  // Custom CSS for booking confirmation
+import '../styles/bookingConfirmation.css';
+import airlineLogos from '../assets/airlineLogos';
 
 const BookingDetails = () => {
   const location = useLocation();
@@ -14,14 +15,17 @@ const BookingDetails = () => {
 
   // Parse flightDetails JSON string
   const flightDetails = JSON.parse(booking.flightDetails);
+  const travelers = JSON.parse(booking.travelers);
 
   if (!flightDetails || flightDetails.length === 0) {
     return <div>Error: No flight details available.</div>;
   }
 
   // Extract relevant details from the parsed flightDetails
-  const { travelerPricings, itineraries, price } = flightDetails[0];
-
+  const { travelerPricings, itineraries, price, validatingAirlineCodes  } = flightDetails[0];
+  const departureSegments = itineraries[0]?.segments || [];
+  const returnSegments = itineraries[1]?.segments || [];
+  const airlineLogo = airlineLogos[validatingAirlineCodes[0]] || '/images/logos/default.png';
 
   const handleCancelBooking = async () => {
     try {
@@ -29,7 +33,7 @@ const BookingDetails = () => {
         data: { bookingId: booking.bookingId, email }
       });
       alert('Booking successfully canceled.');
-      navigate('/');  // Redirect to home or another page after cancellation
+      navigate('/');  // Redirect to home after cancellation
     } catch (error) {
       console.error('Error canceling booking:', error);
       alert('Error canceling booking. Please try again.');
@@ -37,50 +41,116 @@ const BookingDetails = () => {
   };
 
   return (
-    <div className="confirmation-box">
-      <h1 className="confirmation-title">Booking Confirmation</h1>
-      <p className="confirmation-id">Booking ID: <strong>{booking.bookingId}</strong></p>
-      <p className="booking-message">Your flight has been confirmed!</p> {/* Confirmation message */}
+    <div className="confirmation-container">
+      <h1 className="confirmation-title">Your Booking</h1>
+      <div className="card booking-info-card">
+        <h2>Booking Information</h2>
+        <p><strong>Booking ID:</strong> {booking.bookingId}</p>
+        <p><strong>Total Price:</strong> ${price.total}</p>
+      </div>
 
-      <h2 className="section-title">Traveler Information:</h2>
-      <ul className="traveler-list">
-        {travelerPricings?.length > 0 ? (
-          travelerPricings.map((traveler, index) => (
-            <li key={index} className="traveler-item">
-              Traveler {traveler.travelerId}: {traveler.travelerType} - Fare: {traveler.fareOption}
+      <div className="card">
+        <h2 className="section-title">Passenger Details:</h2>
+        <ul className="traveler-list">
+          {travelers.map((traveler, index) => (
+            <li key={index}>
+              {traveler.name.firstName} {traveler.name.lastName} - {traveler.contact.emailAddress}
             </li>
-          ))
-        ) : (
-          <li>No traveler information available</li>
-        )}
-      </ul>
+          ))}
+        </ul>
+      </div>
 
-      <h2 className="section-title">Flight Details:</h2>
-      {itineraries?.length > 0 ? (
-        itineraries.map((itinerary, itinIndex) => (
-          <div key={itinIndex} className="flight-details">
-            {itinerary.segments.map((segment, segIndex) => (
-              <div key={segIndex} className="segment-details">
-                <h4 className="flight-date-title">{`${new Date(segment.departure.at).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}`}</h4>
-                <p className="flight-route">{`${segment.departure.iataCode} -> ${segment.arrival.iataCode}`}</p>
+      <div className="card">
+        <h2 className="section-title">Flight Details:</h2>
 
-                <p><strong>Departure:</strong> {segment.departure.iataCode} (Terminal: {segment.departure.terminal}) at {new Date(segment.departure.at).toLocaleString()}</p>
-                <p><strong>Arrival:</strong> {segment.arrival.iataCode} (Terminal: {segment.arrival.terminal}) at {new Date(segment.arrival.at).toLocaleString()}</p>
-                <p><strong>Flight Number:</strong> {segment.carrierCode} {segment.number}</p>
-                <p><strong>Class:</strong> {travelerPricings[0].fareDetailsBySegment[segIndex].cabin}</p>
-                <p><strong>Number of Stops:</strong> {segment.numberOfStops}</p>
-                <p><strong>Duration:</strong> {calculateDuration(itinerary.segments)}</p>
-                <hr />
-              </div>
-            ))}
+        <div className="flight-section">
+          <div className="sub-section-title-container">
+            <h3 className="sub-section-title">Departure Flight:</h3>
+            <img src={airlineLogo} alt={validatingAirlineCodes[0]} className="airline-logo" />
           </div>
-        ))
-      ) : (
-        <p>No flight details available</p>
-      )}
 
-      <h3 className="thank-you">Thank you for choosing our service!</h3>
-      <button className="btn btn-danger" onClick={handleCancelBooking}>Cancel Booking</button>
+          <table className="flight-details-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Route</th>
+                <th>Departure Time</th>
+                <th>Arrival Time</th>
+                <th>Flight Number</th>
+                <th>Class</th>
+                <th>Duration</th>
+              </tr>
+            </thead>
+            <tbody>
+              {departureSegments.map((segment, index) => (
+                <tr key={index}>
+                  <td>
+                    {new Date(segment.departure.at).toLocaleDateString('en-US', {
+                      weekday: 'long',
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                    })}
+                  </td>
+                  <td>{`${segment.departure.iataCode} -> ${segment.arrival.iataCode}`}</td>
+                  <td>{new Date(segment.departure.at).toLocaleTimeString()}</td>
+                  <td>{new Date(segment.arrival.at).toLocaleTimeString()}</td>
+                  <td>{`${segment.carrierCode} ${segment.number}`}</td>
+                  <td>{travelerPricings[0]?.fareDetailsBySegment[index]?.cabin}</td>
+                  <td>{calculateDuration([segment])}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <div className="flight-section">
+          <div className="sub-section-title-container">
+            <h3 className="sub-section-title">Return Flight:</h3>
+            <img src={airlineLogo} alt={validatingAirlineCodes[0]} className="airline-logo" />
+          </div>
+
+          <table className="flight-details-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Route</th>
+                <th>Departure Time</th>
+                <th>Arrival Time</th>
+                <th>Flight Number</th>
+                <th>Class</th>
+                <th>Stops</th>
+                <th>Duration</th>
+              </tr>
+            </thead>
+            <tbody>
+              {returnSegments.map((segment, index) => (
+                <tr key={index}>
+                  <td>
+                    {new Date(segment.departure.at).toLocaleDateString('en-US', {
+                      weekday: 'long',
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                    })}
+                  </td>
+                  <td>{`${segment.departure.iataCode} -> ${segment.arrival.iataCode}`}</td>
+                  <td>{new Date(segment.departure.at).toLocaleTimeString()}</td>
+                  <td>{new Date(segment.arrival.at).toLocaleTimeString()}</td>
+                  <td>{`${segment.carrierCode} ${segment.number}`}</td>
+                  <td>{travelerPricings[0]?.fareDetailsBySegment[index]?.cabin}</td>
+                  <td>{segment.numberOfStops}</td>
+                  <td>{calculateDuration([segment])}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div className="button-container">
+        <button className="btn btn-danger" onClick={handleCancelBooking}>Cancel Booking</button>
+      </div>
     </div>
   );
 };

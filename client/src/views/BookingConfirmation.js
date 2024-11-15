@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import '../styles/bookingConfirmation.css';
+import airlineLogos from '../assets/airlineLogos';
 import { useLocation } from 'react-router-dom';
 
 const BookingConfirmation = () => {
@@ -59,54 +60,133 @@ const BookingConfirmation = () => {
   if (error) return <div>{error}</div>;
   if (!booking) return <div>Loading...</div>;
 
-  const { bookingId, flightDetails } = booking;
-  const { travelerPricings, itineraries } = flightDetails[0] || {};
+  const { bookingId, flightDetails  } = booking;
+  const travelers = JSON.parse(booking.travelers);
+  const { travelerPricings, itineraries, validatingAirlineCodes } = flightDetails[0] || {};
+  const departureSegments = itineraries[0]?.segments || [];
+  const returnSegments = itineraries[1]?.segments || [];
+  const airlineLogo = airlineLogos[validatingAirlineCodes[0]] || '/images/logos/default.png';
 
   return (
-    <div className="confirmation-box">
+    <div className="confirmation-container">
       <h1 className="confirmation-title">Booking Confirmation</h1>
-      <p className="confirmation-id">Booking ID: <strong>{bookingId}</strong></p>
-      <p className="booking-message">Your flight has been booked!</p>
+        <div className="card booking-info-card">
+            <h2>Booking Information</h2>
+            <p><strong>Booking ID:</strong> {bookingId}</p>
+            <p className="booking-message">Your flight has been successfully booked!</p>
+        </div>
 
-      <h2 className="section-title">Traveler Information:</h2>
+      <div className="card">
+      <h2 className="section-title">Passenger Details:</h2>
       <ul className="traveler-list">
-        {travelerPricings?.length > 0 ? (
-          travelerPricings.map((traveler, index) => (
-            <li key={index} className="traveler-item">
-              Traveler {traveler.travelerId}: {traveler.travelerType} - Fare: {traveler.fareOption}
+        {travelers && travelers.length > 0 ? (
+          travelers.map((traveler, index) => (
+            <li key={index}>
+              {traveler.name.firstName} {traveler.name.lastName} - {traveler.contact.emailAddress}
             </li>
           ))
         ) : (
-          <li>No traveler information available</li>
+          <li>No passenger information available</li>
         )}
       </ul>
+      </div>
 
+      <div className="card">
       <h2 className="section-title">Flight Details:</h2>
-      {itineraries?.length > 0 ? (
-        itineraries.map((itinerary, itinIndex) => (
-          <div key={itinIndex} className="flight-details">
-            {itinerary.segments.map((segment, segIndex) => (
-              <div key={segIndex} className="segment-details">
-                <h4 className="flight-date-title">
-                  {new Date(segment.departure.at).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
-                </h4>
-                <p className="flight-route">{`${segment.departure.iataCode} -> ${segment.arrival.iataCode}`}</p>
-                <p><strong>Departure:</strong> {segment.departure.iataCode} (Terminal: {segment.departure.terminal}) at {new Date(segment.departure.at).toLocaleString()}</p>
-                <p><strong>Arrival:</strong> {segment.arrival.iataCode} (Terminal: {segment.arrival.terminal}) at {new Date(segment.arrival.at).toLocaleString()}</p>
-                <p><strong>Flight Number:</strong> {segment.carrierCode} {segment.number}</p>
-                <p><strong>Class:</strong> {travelerPricings[0]?.fareDetailsBySegment[segIndex]?.cabin}</p>
-                <p><strong>Number of Stops:</strong> {segment.numberOfStops}</p>
-                <p><strong>Duration:</strong> {calculateDuration(itinerary.segments)}</p>
-                <hr />
-              </div>
-            ))}
-          </div>
-        ))
-      ) : (
-        <p>No flight details available</p>
-      )}
 
-      <h3 className="thank-you">Thank you for booking with SIFT!</h3>
+      <div className="flight-section">
+        <div className="sub-section-title-container">
+            <h3 className="sub-section-title">Departure Flight:</h3>
+            <img src={airlineLogo} alt={validatingAirlineCodes[0]} className="airline-logo" />
+        </div>
+
+        {departureSegments.length > 0 ? (
+          <table className="flight-details-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Route</th>
+                <th>Departure Time</th>
+                <th>Arrival Time</th>
+                <th>Flight Number</th>
+                <th>Class</th>
+                <th>Duration</th>
+              </tr>
+            </thead>
+            <tbody>
+              {departureSegments.map((segment, index) => (
+                <tr key={index}>
+                  <td>
+                    {new Date(segment.departure.at).toLocaleDateString('en-US', {
+                      weekday: 'long',
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                    })}
+                  </td>
+                  <td>{`${segment.departure.iataCode} -> ${segment.arrival.iataCode}`}</td>
+                  <td>{new Date(segment.departure.at).toLocaleTimeString()}</td>
+                  <td>{new Date(segment.arrival.at).toLocaleTimeString()}</td>
+                  <td>{`${segment.carrierCode} ${segment.number}`}</td>
+                  <td>{travelerPricings[0]?.fareDetailsBySegment[index]?.cabin}</td>
+                  <td>{calculateDuration([segment])}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <p>No departure flight details available</p>
+        )}
+      </div>
+
+      <div className="flight-section">
+        <div className="sub-section-title-container">
+            <h3 className="sub-section-title">Return Flight:</h3>
+            <img src={airlineLogo} alt={validatingAirlineCodes[0]} className="airline-logo" />
+        </div>
+
+        {returnSegments.length > 0 ? (
+          <table className="flight-details-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Route</th>
+                <th>Departure Time</th>
+                <th>Arrival Time</th>
+                <th>Flight Number</th>
+                <th>Class</th>
+                <th>Stops</th>
+                <th>Duration</th>
+              </tr>
+            </thead>
+            <tbody>
+              {returnSegments.map((segment, index) => (
+                <tr key={index}>
+                  <td>
+                    {new Date(segment.departure.at).toLocaleDateString('en-US', {
+                      weekday: 'long',
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                    })}
+                  </td>
+                  <td>{`${segment.departure.iataCode} -> ${segment.arrival.iataCode}`}</td>
+                  <td>{new Date(segment.departure.at).toLocaleTimeString()}</td>
+                  <td>{new Date(segment.arrival.at).toLocaleTimeString()}</td>
+                  <td>{`${segment.carrierCode} ${segment.number}`}</td>
+                  <td>{travelerPricings[0]?.fareDetailsBySegment[index]?.cabin}</td>
+                  <td>{segment.numberOfStops}</td>
+                  <td>{calculateDuration([segment])}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <p>No return flight details available</p>
+        )}
+      </div>
+      </div>
+      <h3 className="thank-you-message">Thank you for booking with SIFT!</h3>
     </div>
   );
 };
