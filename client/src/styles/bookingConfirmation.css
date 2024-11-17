@@ -1,80 +1,85 @@
-.confirmation-box {
-    border: 1px solid #e0e0e0;
-    border-radius: 12px;
-    padding: 25px;
-    margin-top: 20px;
-    background-color: #fefefe;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
+.confirmation-container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .confirmation-title {
-    font-size: 1.5rem;
+    font-size: 2rem;
     font-weight: bold;
-    margin-bottom: 10px;
-}
-
-.confirmation-id {
-    font-size: 1.2rem;
     margin-bottom: 20px;
+    text-align: center;
+    color: #333;
 }
 
-.section-title {
-    font-size: 1.2rem;
-    margin-top: 20px;
-    margin-bottom: 10px;
+.card {
+    width: 100%; /* Make the card take full width of its container */
+    max-width: 1100px; /* Limit the maximum width of the card */
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px auto; /* Center the card horizontally */
+    background-color: #ffffff;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.card h2 {
+    font-size: 1.4rem;
+    margin-bottom: 15px;
+    color: #007bff;
 }
 
 .traveler-list {
-    list-style-type: none;
-    padding-left: 0;
+    list-style: none;
+    padding: 0;
 }
 
-.traveler-item {
+.traveler-list li {
     font-size: 1rem;
-    margin-bottom: 5px;
-}
-
-.flight-details {
-    margin-bottom: 20px;
-}
-
-.flight-carrier,
-.flight-price {
-    font-size: 1.1rem;
-    font-weight: bold;
-}
-
-.flight-itinerary-title {
-    font-size: 1.1rem;
-    margin-top: 15px;
-}
-
-.segment-details {
-    margin: 10px 0;
-}
-
-.thank-you {
-    margin-top: 20px;
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: #007bff; /* Optional: Change color for emphasis */
-}
-
-.booking-message {
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: #28a745; /* Optional: green color for confirmation */
-    margin-top: 10px;
-    margin-bottom: 20px;
-}
-
-.flight-date-title {
-    font-size: 1.5rem;
-    font-weight: bold;
-    margin-top: 10px;
-}
-
-.flight-route {
-    font-size: 1.2rem;
     margin-bottom: 10px;
+}
+
+.flight-section {
+    margin-bottom: 20px;
+}
+
+.flight-details-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.flight-details-table th,
+.flight-details-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+.flight-details-table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+
+.thank-you-message {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #28a745;
+    font-weight: bold;
+    margin-top: 30px;
+}
+
+.sub-section-title-container {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Adjust the spacing between text and image */
+  }
+  
+.airline-logo {
+    width: 80px;
+    height: auto; /* Maintain aspect ratio */
 }
