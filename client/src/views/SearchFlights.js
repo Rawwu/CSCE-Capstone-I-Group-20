@@ -124,7 +124,28 @@ const SearchFlights = () => {
                 <img src="/images/SIFT-Logo-Text-Only.png" alt="SIFT" style={{ height: '50px' }} />
                 <SearchBar handleSearch={handleSearch} />
             </div>
-            
+
+            {loading && (
+                <div className="loading-spinner">
+                    <div className="spinner"></div>
+                    <p>Searching for flights...</p>
+                </div>
+            )}
+
+            {!loading && (
+                <>             
+                {/* Filter Section */}
+                <div className="filters-and-results">
+                    {showFilters && <Filters onFilterChange={handleFilterChange} />}
+                    <div className="flights-list-container">
+                        {loading && <p>Loading flights...</p>}
+                        {error && <p style={{ color: 'red' }}>{error}</p>}
+                        {flights.length > 0 && <FlightsList flights={applyFilters(flights)} handleSelect={handleSelectFlight} />}
+                    </div>
+                </div>
+                </>
+            )}
+
             {/* Introductory Section */}
             {showIntro && (
                 <div className="intro-section">
@@ -165,16 +186,6 @@ const SearchFlights = () => {
                     </div>
                 </div>
             )}
-
-            {/* Filter Section */}
-            <div className="filters-and-results">
-                {showFilters && <Filters onFilterChange={handleFilterChange} />}
-                <div className="flights-list-container">
-                    {loading && <p>Loading flights...</p>}
-                    {error && <p style={{ color: 'red' }}>{error}</p>}
-                    {flights.length > 0 && <FlightsList flights={applyFilters(flights)} handleSelect={handleSelectFlight} />}
-                </div>
-            </div>
 
             {/* Footer Section */}
             <footer className="footer">

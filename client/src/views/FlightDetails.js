@@ -57,6 +57,7 @@ const FlightDetails = () => {
     }, [flight, hasFetchedSeatMap]);
 
     const confirmPrice = async () => {
+        setIsLoading(true); // Start spinner
         try {
             if (!flight || !flight.itineraries) {
                 setErrorMessage('Invalid flight data. Please try again.');
@@ -101,8 +102,11 @@ const FlightDetails = () => {
             } else {
                 setErrorMessage('Unable to confirm the price. Please try again later.');
             }
+        } finally {
+            setIsLoading(false); // Stop spinner
         }
-    };    
+    };
+   
 
     const handleSeatSelection = (seat, itineraryIndex, segIndex) => {
         if (!seat) return;
@@ -126,36 +130,50 @@ const FlightDetails = () => {
 
     return (
         <div className="details-box">
-            <div className="details-header">
-                <h2>Flight Details</h2>
-                {price && <div className="header-right"><p><strong>Total Price:</strong> ${price.total}</p></div>}
-            </div>
+            {isLoading ? (
+                <div className="loading-container text-center">
+                    <div className="spinner-border text-primary" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                    </div>
+                    <p>Processing your request...</p>
+                </div>
+            ) : (
+                <>
+                    <div className="details-header">
+                        <h2>Flight Details</h2>
+                        {price && (
+                            <div className="header-right">
+                                <p><strong>Total Price:</strong> ${price.total}</p>
+                            </div>
+                        )}
+                    </div>
 
-            {itineraries ? itineraries.map((itinerary, idx) => (
-            <div key={idx} className="itinerary">
-                <h3>Itinerary {idx + 1}</h3>
-                {itinerary.segments.map((segment, segIdx) => {
-                    // Find the matching fare detail by segment ID
-                    const matchingFareDetail = flight.travelerPricings?.[0]?.fareDetailsBySegment?.find(
-                        fareDetail => fareDetail.segmentId === segment.id
-                    );
+                    {/* Render flight itineraries */}
+                    {itineraries ? itineraries.map((itinerary, idx) => (
+                    <div key={idx} className="itinerary">
+                        <h3>Itinerary {idx + 1}</h3>
+                        {itinerary.segments.map((segment, segIdx) => {
+                            // Find the matching fare detail by segment ID
+                            const matchingFareDetail = flight.travelerPricings?.[0]?.fareDetailsBySegment?.find(
+                                fareDetail => fareDetail.segmentId === segment.id
+                            );
 
-                    return (
-                        <div key={segIdx} className="flight-segment">
-                            <h4>{new Date(segment.departure.at).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</h4>
-                            <img src={airlineLogo} alt={validatingAirlineCodes[0]} className="airline-logo me-3" />
-                            <p><strong>{segment.departure.iataCode} → {segment.arrival.iataCode}</strong></p>
-                            <p><strong>Flight:</strong> {segment.carrierCode} {segment.number}</p>
-                            <p><strong>Departure:</strong> {segment.departure.iataCode} at {new Date(segment.departure.at).toLocaleTimeString()}</p>
-                            <p><strong>Arrival:</strong> {segment.arrival.iataCode} at {new Date(segment.arrival.at).toLocaleTimeString()}</p>
-                            <p><strong>Class:</strong> {matchingFareDetail ? matchingFareDetail.cabin : 'N/A'}</p>
-                            <p><strong>Duration:</strong> {calculateDuration(itinerary.segments)}</p>
-                        </div>
-                    );
-                })}
-                {idx < itineraries.length - 1 && <hr className="itinerary-divider" />}
-            </div>
-            )) : <p>No flight details available.</p>}
+                            return (
+                                <div key={segIdx} className="flight-segment">
+                                    <h4>{new Date(segment.departure.at).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</h4>
+                                    <img src={airlineLogo} alt={validatingAirlineCodes[0]} className="airline-logo me-3" />
+                                    <p><strong>{segment.departure.iataCode} → {segment.arrival.iataCode}</strong></p>
+                                    <p><strong>Flight:</strong> {segment.carrierCode} {segment.number}</p>
+                                    <p><strong>Departure:</strong> {segment.departure.iataCode} at {new Date(segment.departure.at).toLocaleTimeString()}</p>
+                                    <p><strong>Arrival:</strong> {segment.arrival.iataCode} at {new Date(segment.arrival.at).toLocaleTimeString()}</p>
+                                    <p><strong>Class:</strong> {matchingFareDetail ? matchingFareDetail.cabin : 'N/A'}</p>
+                                    <p><strong>Duration:</strong> {calculateDuration(itinerary.segments)}</p>
+                                </div>
+                            );
+                        })}
+                        {idx < itineraries.length - 1 && <hr className="itinerary-divider" />}
+                    </div>
+                    )) : <p>No flight details available.</p>}
 
 
             {isLoading ? (
@@ -177,9 +195,11 @@ const FlightDetails = () => {
                 <p>{errorMessage}</p>
             )}
 
-            <div className="confirm-button text-center mt-4">
-                <button onClick={confirmPrice}>Confirm Price and Proceed to Booking</button>
-            </div>
+                    <div className="confirm-button text-center mt-4">
+                        <button onClick={confirmPrice}>Confirm Price</button>
+                    </div>
+                </>
+            )}
         </div>
     );
 };
