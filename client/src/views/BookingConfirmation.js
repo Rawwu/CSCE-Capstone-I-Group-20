@@ -155,7 +155,6 @@ const BookingConfirmation = () => {
                 <th>Arrival Time</th>
                 <th>Flight Number</th>
                 <th>Class</th>
-                <th>Stops</th>
                 <th>Duration</th>
               </tr>
             </thead>
@@ -175,7 +174,6 @@ const BookingConfirmation = () => {
                   <td>{new Date(segment.arrival.at).toLocaleTimeString()}</td>
                   <td>{`${segment.carrierCode} ${segment.number}`}</td>
                   <td>{travelerPricings[0]?.fareDetailsBySegment[index]?.cabin}</td>
-                  <td>{segment.numberOfStops}</td>
                   <td>{calculateDuration([segment])}</td>
                 </tr>
               ))}

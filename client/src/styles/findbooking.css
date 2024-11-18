@@ -1,8 +1,10 @@
-.find-booking-container {
-    background-color: rgb(75, 75, 75);
-    text-align: left;
-    border-radius: 20px;
-    padding: 45px;
+.findbooking-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
 }
 
 .findbooking-card {
@@ -16,11 +18,37 @@
   justify-content: center;
   padding: 20px 50px;
   border-radius: 20px;
-  box-shadow:  0 5px 8px #4d4d4d;
+  box-shadow: 0 5px 8px #4d4d4d;
 }
 
-.btn-primary {
-    background-color: #61dafb;
-    padding-left: 35px;
-    padding-right: 35px;
+.form-div {
+  display: flex;
+  align-items: start;
+  flex-direction: column;
+  background-color: #fafafa;
+  padding: 10px 15px;
+  border-radius: 10px;
+}
+
+.btn-findbooking {
+  background-color: #61dafb;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn-findbooking:hover {
+  opacity: 80%;
+}
+
+.form-div label {
+  padding-bottom: 10px;
+}
+
+.findbooking-wrapper h2 {
+  border-bottom: 2px solid;
+  font-weight: bold;
+  padding-bottom: 5px;
 }
