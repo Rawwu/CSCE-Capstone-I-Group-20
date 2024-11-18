@@ -21,6 +21,15 @@ const UserProfile = () => {
   const [updatedStatus, setUpdatedStatus] = useState({});
   const [confirmationCode, setConfirmationCode] = useState('');
   const [distancesByAirline, setDistancesByAirline] = useState({});
+  const [openBookings, setOpenBookings] = useState([]);
+
+  const handleToggleBooking = (bookingId) => {
+    setOpenBookings((prev) =>
+      prev.includes(bookingId)
+        ? prev.filter((id) => id !== bookingId)
+        : [...prev, bookingId]
+    );
+  };
 
   const updateUserAttr = async () => {
     const res = await updateUserAttributes({
@@ -129,9 +138,9 @@ const UserProfile = () => {
   }, []);
 
   return (
-    <div>
-      <div>
-        <div className='profile-header'>
+    <div className="profile-container">
+      <div className="card">
+        <div className="profile-header">
           <h2>Profile</h2>
           {isChanging ? (
             <button className="change-btn" onClick={handleProfileChange}>Save</button>
@@ -140,174 +149,160 @@ const UserProfile = () => {
           )}
         </div>
         <section>
+          {/* Name */}
           <div>
             <label htmlFor="full_name">Full name:</label>
-            {
-              userAttributes.name || isChanging ?
-                <input
-                  type="text"
-                  id="full_name"
-                  placeholder="Enter your full name"
-                  className='user-input'
-                  defaultValue={userAttributes.name}
-                  disabled={!isChanging} //if is changing do not disable
-                  onChange={(e) => setUserAttributes((prev) => ({
-                    ...prev,
-                    name: e.target.value
-                  }))}
-                  required
-                />
-                :
-                <div>N/A</div>
-            }
+            <input
+              type="text"
+              id="full_name"
+              className="user-input"
+              placeholder="Enter your full name"
+              defaultValue={userAttributes.name}
+              disabled={!isChanging}
+              onChange={(e) =>
+                setUserAttributes((prev) => ({
+                  ...prev,
+                  name: e.target.value,
+                }))
+              }
+            />
           </div>
-
+  
+          {/* Phone */}
           <div>
             <label htmlFor="phone_number">Phone:</label>
-            {
-              userAttributes.phone_number || isChanging ?
-                <input
-                  type="text"
-                  id="phone_number"
-                  placeholder="Enter your phone number"
-                  className='user-input'
-                  defaultValue={userAttributes.phone_number}
-                  disabled={!isChanging} //if is changing do not disable
-                  onChange={(e) => setUserAttributes((prev) => ({
-                    ...prev,
-                    phone_number: e.target.value
-                  }))}
-                  required
-                />
-                :
-                <div>N/A</div>
-            }
+            <input
+              type="text"
+              id="phone_number"
+              className="user-input"
+              placeholder="Enter your phone number"
+              defaultValue={userAttributes.phone_number}
+              disabled={!isChanging}
+              onChange={(e) =>
+                setUserAttributes((prev) => ({
+                  ...prev,
+                  phone_number: e.target.value,
+                }))
+              }
+            />
           </div>
-
+  
+          {/* Email */}
           <div>
             <label htmlFor="email">Email:</label>
             <input
               type="email"
               id="email"
               className="user-input"
-              value={userAttributes.email || ''}
+              value={userAttributes.email || ""}
               disabled={!isChanging}
-              onChange={(e) => setUserAttributes((prev) => ({ ...prev, email: e.target.value }))}
+              onChange={(e) =>
+                setUserAttributes((prev) => ({
+                  ...prev,
+                  email: e.target.value,
+                }))
+              }
             />
           </div>
-
+  
+          {/* Address */}
           <div>
             <label htmlFor="address">Address or street name:</label>
-            {
-              userAttributes.address || isChanging ?
-                <input
-                  type="text"
-                  id="address"
-                  placeholder="Enter your full name"
-                  className='user-input'
-                  defaultValue={userAttributes.address}
-                  disabled={!isChanging} //if is changing do not disable
-                  onChange={(e) => setUserAttributes((prev) => ({
-                    ...prev,
-                    address: e.target.value
-                  }))}
-                  required
-                />
-                :
-                <div>N/A</div>
-            }
+            <input
+              type="text"
+              id="address"
+              className="user-input"
+              placeholder="Enter your address"
+              defaultValue={userAttributes.address}
+              disabled={!isChanging}
+              onChange={(e) =>
+                setUserAttributes((prev) => ({
+                  ...prev,
+                  address: e.target.value,
+                }))
+              }
+            />
           </div>
-
+  
+          {/* Apartment Number */}
           <div>
             <label htmlFor="apartment_number">Apartment #:</label>
-            {
-              userAttributes["custom:apartment_number"] || isChanging ?
-                <input
-                  type="text"
-                  id="apartment_number"
-                  placeholder="Enter your full name"
-                  className='user-input'
-                  defaultValue={userAttributes["custom:apartment_number"]}
-                  disabled={!isChanging} //if is changing do not disable
-                  onChange={(e) => setUserAttributes((prev) => ({
-                    ...prev,
-                    "custom:apartment_number": e.target.value
-                  }))}
-                  required
-                />
-                :
-                <div>N/A</div>
-            }
+            <input
+              type="text"
+              id="apartment_number"
+              className="user-input"
+              placeholder="Enter your apartment number"
+              defaultValue={userAttributes["custom:apartment_number"]}
+              disabled={!isChanging}
+              onChange={(e) =>
+                setUserAttributes((prev) => ({
+                  ...prev,
+                  "custom:apartment_number": e.target.value,
+                }))
+              }
+            />
           </div>
-
+  
+          {/* City */}
           <div>
             <label htmlFor="city">City:</label>
-            {
-              userAttributes["custom:city"] || isChanging ?
-                <input
-                  type="text"
-                  id="city"
-                  placeholder="Enter your full name"
-                  className='user-input'
-                  defaultValue={userAttributes["custom:city"]}
-                  disabled={!isChanging} //if is changing do not disable
-                  onChange={(e) => setUserAttributes((prev) => ({
-                    ...prev,
-                    "custom:city": e.target.value
-                  }))}
-                  required
-                />
-                :
-                <div>N/A</div>
-            }
+            <input
+              type="text"
+              id="city"
+              className="user-input"
+              placeholder="Enter your city"
+              defaultValue={userAttributes["custom:city"]}
+              disabled={!isChanging}
+              onChange={(e) =>
+                setUserAttributes((prev) => ({
+                  ...prev,
+                  "custom:city": e.target.value,
+                }))
+              }
+            />
           </div>
-
+  
+          {/* State */}
           <div>
             <label htmlFor="state">State:</label>
-            {
-              userAttributes["custom:state"] || isChanging ?
-                <input
-                  type="text"
-                  id="state"
-                  placeholder="Enter your full name"
-                  className='user-input'
-                  defaultValue={userAttributes["custom:state"]}
-                  disabled={!isChanging} //if is changing do not disable
-                  onChange={(e) => setUserAttributes((prev) => ({
-                    ...prev,
-                    "custom:state": e.target.value
-                  }))}
-                  required
-                />
-                :
-                <div>N/A</div>
-            }
+            <input
+              type="text"
+              id="state"
+              className="user-input"
+              placeholder="Enter your state"
+              defaultValue={userAttributes["custom:state"]}
+              disabled={!isChanging}
+              onChange={(e) =>
+                setUserAttributes((prev) => ({
+                  ...prev,
+                  "custom:state": e.target.value,
+                }))
+              }
+            />
           </div>
-
+  
+          {/* Zip Code */}
           <div>
             <label htmlFor="zip_code">Zip code:</label>
-            {
-              userAttributes["custom:zip_code"] || isChanging ?
-                <input
-                  type="text"
-                  id="zip_code"
-                  placeholder="Enter your full name"
-                  className='user-input'
-                  defaultValue={userAttributes["custom:zip_code"]}
-                  disabled={!isChanging} //if is changing do not disable
-                  onChange={(e) => setUserAttributes((prev) => ({
-                    ...prev,
-                    "custom:zip_code": e.target.value
-                  }))}
-                  required
-                />
-                :
-                <div>N/A</div>
-            }
+            <input
+              type="text"
+              id="zip_code"
+              className="user-input"
+              placeholder="Enter your zip code"
+              defaultValue={userAttributes["custom:zip_code"]}
+              disabled={!isChanging}
+              onChange={(e) =>
+                setUserAttributes((prev) => ({
+                  ...prev,
+                  "custom:zip_code": e.target.value,
+                }))
+              }
+            />
           </div>
-
+  
           {/* Email Confirmation */}
-          {updatedStatus.email?.nextStep?.updateAttributeStep === "CONFIRM_ATTRIBUTE_WITH_CODE" && (
+          {updatedStatus.email?.nextStep?.updateAttributeStep ===
+            "CONFIRM_ATTRIBUTE_WITH_CODE" && (
             <form onSubmit={handleSubmit}>
               <label htmlFor="confirmationCode">Confirmation code:</label>
               <input
@@ -322,16 +317,22 @@ const UserProfile = () => {
           )}
         </section>
       </div>
-
-      <section>
+  
+      {/* Loyalty Program */}
+      <section className="card">
         <h2>Loyalty Program</h2>
         {Object.keys(distancesByAirline).length > 0 ? (
           <div className="loyalty-box">
             {Object.entries(distancesByAirline).map(([airline, miles]) => (
               <div key={airline} className="loyalty-card">
-                <img src={airlines.find(a => a.id === airline).logo} alt={`${airline} logo`} />
+                <img
+                  src={airlines.find((a) => a.id === airline).logo}
+                  alt={`${airline} logo`}
+                />
                 <div>
-                  <div className="title">{airlines.find(a => a.id === airline).name}</div>
+                  <div className="title">
+                    {airlines.find((a) => a.id === airline).name}
+                  </div>
                   <div>{miles} miles earned</div>
                 </div>
               </div>
@@ -341,47 +342,101 @@ const UserProfile = () => {
           <p>No flight data available.</p>
         )}
       </section>
+  
+      {/* Bookings */}
+      <section className="card">
+        <h2>Your Bookings</h2>
+        {bookings.length > 0 ? (
+            <ul>
+            {bookings.map((booking) => {
+                // Parse flight details for trip summary
+                const flightDetails = JSON.parse(booking.flightDetails);
+                const firstSegment = flightDetails[0]?.itineraries[0]?.segments[0];
+                const lastSegment =
+                flightDetails[0]?.itineraries[0]?.segments[
+                  flightDetails[0]?.itineraries[0]?.segments.length - 1
+                ];          
 
-      <h2>Your Bookings</h2>
-      {bookings.length > 0 ? (
-        <ul>
-          {bookings.map((booking) => (
-            <li key={booking.bookingId}>
-              <h4>Booking ID: {booking.bookingId}</h4>
-              {JSON.parse(booking.flightDetails).map((offer, index) => (
-                <div key={index}>
-                  <h4>Flight {index + 1}</h4>
-                  {offer.itineraries.map((itinerary, i) => (
-                    <div key={i}>
-                      <h5>Itinerary {i + 1}</h5>
-                      {itinerary.segments.map((segment, j) => (
-                        <div key={j}>
-                          <div className='airline-iternary'>
-                            <img src={airlines.find(a => a.id === segment.carrierCode).logo} alt={`${segment.carrierCode} logo`} />
-                            <div>
-                              <p className='title'>Airline: {airlines.find(a => a.id === segment.carrierCode)?.name || segment.carrierCode}</p>
-                              <p>Duration: {formatDuration(segment.duration)}</p>
-                            </div>
-                          </div>
-                          <p>From: {segment.departure.iataCode} ({segment.departure.at})</p>
-                          <p>To: {segment.arrival.iataCode} ({segment.arrival.at})</p>
+                const tripSummary =
+                firstSegment && lastSegment
+                  ? `${firstSegment.departure.iataCode} → ${lastSegment.arrival.iataCode}`
+                  : "Trip Details Not Available";
 
-                          <hr />
-                        </div>
-                      ))}
-                      <hr />
+                return (
+                <li key={booking.bookingId} className="booking-card">
+                    <div
+                    className="booking-header"
+                    onClick={() => handleToggleBooking(booking.bookingId)}
+                    >
+                    <div className="header-info">
+                        <p>{tripSummary}</p>
+                        <h4>Booking ID: {booking.bookingId}</h4>
                     </div>
-                  ))}
-                </div>
-              ))}
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>No bookings found.</p>
-      )}
+                    <span className="dropdown-icon">
+                        {openBookings.includes(booking.bookingId) ? "▲" : "▼"}
+                    </span>
+                    </div>
+                    <div
+                    className={`booking-details ${
+                        openBookings.includes(booking.bookingId) ? "open" : ""
+                    }`}
+                    >
+                    {JSON.parse(booking.flightDetails).map((offer, index) => (
+                        <div key={index}>
+                        <h4>Flight {index + 1}</h4>
+                        {offer.itineraries.map((itinerary, i) => (
+                            <div key={i}>
+                            <h5>Itinerary {i + 1}</h5>
+                            {itinerary.segments.map((segment, j) => (
+                                <div key={j}>
+                                <div className="airline-iternary">
+                                    <img
+                                    src={
+                                        airlines.find(
+                                        (a) => a.id === segment.carrierCode
+                                        )?.logo
+                                    }
+                                    alt={`${segment.carrierCode} logo`}
+                                    />
+                                    <div>
+                                    <p className="title">
+                                        Airline:{" "}
+                                        {airlines.find(
+                                        (a) => a.id === segment.carrierCode
+                                        )?.name || segment.carrierCode}
+                                    </p>
+                                    <p>
+                                        Duration: {formatDuration(segment.duration)}
+                                    </p>
+                                    </div>
+                                </div>
+                                <p>
+                                    From: {segment.departure.iataCode} at{" "}
+                                    {new Date(segment.departure.at).toLocaleTimeString()}
+                                </p>
+                                <p>
+                                    To: {segment.arrival.iataCode} at{" "}
+                                    {new Date(segment.arrival.at).toLocaleTimeString()}
+                                </p>
+                                <hr />
+                                </div>
+                            ))}
+                            <hr />
+                            </div>
+                        ))}
+                        </div>
+                    ))}
+                    </div>
+                </li>
+                );
+            })}
+            </ul>
+        ) : (
+            <p>No bookings found.</p>
+        )}
+      </section>
     </div>
-  );
+  );  
 };
 
 export default UserProfile;
